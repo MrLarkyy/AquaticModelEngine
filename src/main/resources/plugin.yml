@@ -1,0 +1,4 @@
+name: AquaticModelEngine
+version: '${project.version}'
+main: xyz.larkyy.aquaticmodelengine.AquaticModelEngine
+api-version: 1.17
