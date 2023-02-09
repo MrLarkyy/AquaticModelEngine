@@ -2,7 +2,7 @@ package xyz.larkyy.aquaticmodelengine.generator;
 
 import com.google.gson.Gson;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
-import xyz.larkyy.aquaticmodelengine.TemplateRegistry;
+import xyz.larkyy.aquaticmodelengine.model.template.TemplateRegistry;
 import xyz.larkyy.aquaticmodelengine.generator.java.JavaBaseItem;
 import xyz.larkyy.aquaticmodelengine.generator.blockbench.BlockBenchParser;
 import xyz.larkyy.aquaticmodelengine.model.reader.ModelReader;
