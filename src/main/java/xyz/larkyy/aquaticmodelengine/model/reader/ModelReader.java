@@ -2,7 +2,6 @@ package xyz.larkyy.aquaticmodelengine.model.reader;
 
 import xyz.larkyy.aquaticmodelengine.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModel;
-import xyz.larkyy.aquaticmodelengine.model.template.ModelTemplate;
 
 import java.util.HashMap;
 import java.util.Map;

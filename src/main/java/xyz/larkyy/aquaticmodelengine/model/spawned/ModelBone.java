@@ -115,10 +115,7 @@ public class ModelBone {
 
             Quaternion resultQuat = rotationQuat.mul(startQuat);
             var resultEuler = resultQuat.getEulerAnglesXYZ();
-            //Bukkit.broadcastMessage("Previous: "+Math.toDegrees(resultEuler.getX())+" "+Math.toDegrees(resultEuler.getY())+" "+Math.toDegrees(resultEuler.getZ()));
             resultEuler = resultEuler.setX(-resultEuler.getX());
-            //Bukkit.broadcastMessage("New: "+Math.toDegrees(resultEuler.getX())+" "+Math.toDegrees(resultEuler.getY())+" "+Math.toDegrees(resultEuler.getZ()));
-            //Bukkit.broadcastMessage("§dRotation: "+Math.toDegrees(resultEuler.getX())+" "+Math.toDegrees(resultEuler.getY())+" "+Math.toDegrees(resultEuler.getZ()));
             rotation = resultEuler;
         }
 
