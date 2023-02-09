@@ -11,6 +11,7 @@ import java.util.List;
 public class ModelHandler {
 
     private final List<SpawnedModel> spawnedModels = new ArrayList<>();
+    private final ModelTicker modelTicker = new ModelTicker(this);
 
     public List<SpawnedModel> getSpawnedModels() {
         return spawnedModels;
@@ -22,11 +23,23 @@ public class ModelHandler {
 
     public SpawnedModel spawnModel(Entity boundEntity, String model) {
         var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getTemplate(model);
-        return spawnModel(boundEntity,m);
+        var spawnedModel = spawnModel(boundEntity,m);
+        spawnedModels.add(spawnedModel);
+        return spawnedModel;
     }
 
     public void despawnModel(SpawnedModel spawnedModel) {
         spawnedModels.remove(spawnedModel);
         spawnedModel.removeModel();
+    }
+
+    public void tickModels() {
+        for (var model : spawnedModels) {
+            model.tick();
+        }
+    }
+
+    public void startTicking() {
+        modelTicker.runTaskTimer(AquaticModelEngine.getInstance(),1,1);
     }
 }

@@ -33,16 +33,7 @@ public final class AquaticModelEngine extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new Listeners(),this);
 
-        EulerAngle startAngle = new EulerAngle(Math.toRadians(45),Math.toRadians(0),Math.toRadians(0));
-        EulerAngle rotationAngle = new EulerAngle(Math.toRadians(0),Math.toRadians(0),Math.toRadians(-90));
-
-        Quaternion startQuat = new Quaternion(startAngle);
-        Quaternion rotationQuat = new Quaternion(rotationAngle);
-
-        Quaternion resultQuat = rotationQuat.mul(startQuat);
-        var resultEuler = resultQuat.getEulerAnglesXYZ();
-
-        Bukkit.broadcastMessage("Rotated: "+Math.toDegrees(resultEuler.getX())+" "+Math.toDegrees(resultEuler.getY())+" "+Math.toDegrees(resultEuler.getZ()));
+        modelHandler.startTicking();
     }
 
     @Override

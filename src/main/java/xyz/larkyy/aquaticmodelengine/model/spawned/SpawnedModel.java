@@ -18,11 +18,15 @@ public class SpawnedModel {
         this.boundEntity = boundEntity;
         this.modelTemplate = template;
 
-        bones = AquaticModelEngine.getInstance().getModelGenerator().getModelReader().loadModelBones(template);
+        bones = AquaticModelEngine.getInstance().getModelGenerator().getModelReader().loadModelBones(this);
+    }
+
+    public ModelTemplate getModelTemplate() {
+        return modelTemplate;
     }
 
     public ModelBone addBone(TemplateBone templateBone) {
-        var bone = new ModelBone(templateBone);
+        var bone = new ModelBone(templateBone,this);
         bones.put(templateBone.getName(),bone);
         return bone;
     }
@@ -35,6 +39,11 @@ public class SpawnedModel {
         bone.removeModel();
     }
 
+    public void tick() {
+        for (var bone : bones.values()) {
+            bone.tick();
+        }
+    }
     public ModelBone getBone(String name) {
         return this.bones.get(name);
     }
