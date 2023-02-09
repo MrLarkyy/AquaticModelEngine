@@ -4,6 +4,12 @@ import org.bukkit.util.Vector;
 
 public class TimelineUtil {
 
+    /**
+     *
+     * @param lower - lower vector
+     * @param higher - higher vector
+     * @param d - percentage / progress
+     */
     public static Vector lerp(Vector lower, Vector higher, double d) {
         return new Vector(
                 lerp(lower.getX(), higher.getX(), d),
