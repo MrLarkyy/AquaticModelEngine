@@ -120,8 +120,8 @@ public class BlockBenchParser {
             rotation = new EulerAngle(0,0,0);
         } else {
             rotation = new EulerAngle(
-                Math.toRadians(bone.getRotation()[0]),
-                Math.toRadians(bone.getRotation()[1]),
+                -Math.toRadians(bone.getRotation()[0]),
+                -Math.toRadians(bone.getRotation()[1]),
                 Math.toRadians(bone.getRotation()[2])
             );
         }
