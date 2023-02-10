@@ -101,7 +101,9 @@ public class ModelBone {
 
     private EulerAngle getFinalRotation() {
         EulerAngle rotation = templateBone.getRotation();
+
         if (getParent() != null) {
+            //Bukkit.broadcastMessage("Previous "+getTemplateBone().getName()+" rotation: "+Math.toDegrees(rotation.getX())+" "+Math.toDegrees(rotation.getY())+" "+Math.toDegrees(rotation.getZ()));
             var parentRotation = getParent().getFinalRotation();
             parentRotation = new EulerAngle(
                     -parentRotation.getX(),
@@ -116,6 +118,7 @@ public class ModelBone {
             var resultEuler = resultQuat.getEulerAnglesXYZ();
             resultEuler = resultEuler.setX(-resultEuler.getX());
             rotation = resultEuler;
+            //Bukkit.broadcastMessage(getTemplateBone().getName()+" rotation: "+Math.toDegrees(rotation.getX())+" "+Math.toDegrees(rotation.getY())+" "+Math.toDegrees(rotation.getZ()));
         }
 
         return rotation;
@@ -131,9 +134,11 @@ public class ModelBone {
         if (getParent() != null) {
             //var parentPivot = getParent().getTemplateBone().getOrigin();
             //Bukkit.broadcastMessage("Parent Vector: " + parentPivot.getX() + " " + parentPivot.getY() + " " + parentPivot.getZ());
+
             pivot = getParent().getTemplateBone().getOrigin().clone().subtract(pivot);
             //Bukkit.broadcastMessage("Subtracted Vector: " + pivot.getX() + " " + pivot.getY() + " " + pivot.getZ());
-            var rotation = getParent().getTemplateBone().getRotation();
+            //var rotation = getParent().getTemplateBone().getRotation();
+            var rotation = getParent().getFinalRotation();
             //Bukkit.broadcastMessage("Rotating around: "+Math.toDegrees(rotation.getX())+" "+Math.toDegrees(rotation.getY())+" "+Math.toDegrees(rotation.getZ()));
             pivot.rotateAroundX(rotation.getX());
             pivot.rotateAroundY(-rotation.getY());

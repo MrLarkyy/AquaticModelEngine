@@ -18,10 +18,10 @@ public class Listeners implements Listener {
             public void run() {
                 if (e.getMessage().toLowerCase().contains("apply model")) {
                     if (e.getMessage().toLowerCase().contains("robot")) {
-                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"test2");
+                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"tutorialbot");
                         spawnedModel.applyModel();
                         Bukkit.broadcastMessage("Applying model");
-                        spawnedModel.playAnimation("testanimation",1);
+                        spawnedModel.playAnimation("idle",1);
                     } else {
                         spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"test2");
                         spawnedModel.applyModel();

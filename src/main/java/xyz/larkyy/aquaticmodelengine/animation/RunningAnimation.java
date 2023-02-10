@@ -1,5 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.animation;
 
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 public class RunningAnimation {
@@ -59,6 +60,10 @@ public class RunningAnimation {
 
     public Vector getPosition(String bone) {
         return templateAnimation.getPosition(bone,time);
+    }
+
+    public EulerAngle getRotation(String bone) {
+        return templateAnimation.getRotation(bone,time);
     }
 
     public void stop() {

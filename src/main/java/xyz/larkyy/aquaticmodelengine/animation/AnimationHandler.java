@@ -1,5 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.animation;
 
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModel;
@@ -37,6 +38,18 @@ public class AnimationHandler {
             finalVector.add(vector);
         }
         return finalVector;
+    }
+
+    public EulerAngle getRotation(ModelBone modelBone) {
+        EulerAngle finalAngle = EulerAngle.ZERO;
+        for (var animation : runningAnimations.values()) {
+            var angle = animation.getRotation(modelBone.getTemplateBone().getName());
+            if (angle == null) {
+                continue;
+            }
+            finalAngle = finalAngle.add(angle.getX(),angle.getY(),angle.getZ());
+        }
+        return finalAngle;
     }
 
     public void playAnimation(String name, double speed) {

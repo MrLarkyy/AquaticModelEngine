@@ -1,5 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.animation;
 
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -44,6 +45,13 @@ public class TemplateAnimation {
             return new Vector();
         }
         return timelines.get(bone).getPositionFrame(time);
+    }
+
+    public EulerAngle getRotation(String bone, double time) {
+        if (!timelines.containsKey(bone)) {
+            return new EulerAngle(0,0,0);
+        }
+        return timelines.get(bone).getRotation(time);
     }
 
     public boolean isOverride() {

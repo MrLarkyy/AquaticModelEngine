@@ -250,6 +250,14 @@ public class BlockBenchParser {
                     interpolationType = InterpolationType.LINEAR;
                     break;
                 }
+                case "CATMULLROM": {
+                    interpolationType = InterpolationType.SMOOTH;
+                    break;
+                }
+                case "STEP": {
+                    interpolationType = InterpolationType.STEP;
+                    break;
+                }
                 default:
                     interpolationType = InterpolationType.LINEAR;
                     break;
@@ -264,11 +272,16 @@ public class BlockBenchParser {
                             datapoints.get("y").getAsDouble(),
                             -datapoints.get("z").getAsDouble()
                     );
-
-                    vector.checkFinite();
-
                     timeline.addPositionFrame(time,vector,interpolationType);
                     break;
+                }
+                case "rotation": {
+                    EulerAngle eulerAngle = new EulerAngle(
+                            Math.toRadians(datapoints.get("x").getAsDouble()),
+                            Math.toRadians(datapoints.get("y").getAsDouble()),
+                            Math.toRadians(datapoints.get("z").getAsDouble())
+                    );
+                    timeline.addRotationFrame(time,eulerAngle,interpolationType);
                 }
             }
         }
