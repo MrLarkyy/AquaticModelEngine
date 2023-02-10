@@ -41,7 +41,7 @@ public class TemplateAnimation {
 
     public Vector getPosition(String bone, double time) {
         if (!timelines.containsKey(bone)) {
-            return null;
+            return new Vector();
         }
         return timelines.get(bone).getPositionFrame(time);
     }

@@ -48,7 +48,6 @@ public class ModelBone {
 
         var finalPivot = getFinalPivot().clone().multiply(0.0625);
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
-
         var finalLocation = loc.clone().add(finalPivot);
 
         boneEntity.teleport(

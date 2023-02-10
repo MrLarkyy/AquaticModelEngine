@@ -5,6 +5,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
+import xyz.larkyy.aquaticmodelengine.animation.InterpolationType;
+import xyz.larkyy.aquaticmodelengine.animation.LoopMode;
+import xyz.larkyy.aquaticmodelengine.animation.TemplateAnimation;
+import xyz.larkyy.aquaticmodelengine.animation.Timeline;
 import xyz.larkyy.aquaticmodelengine.generator.java.*;
 import xyz.larkyy.aquaticmodelengine.model.template.ModelTemplate;
 import xyz.larkyy.aquaticmodelengine.model.template.TemplateBone;
@@ -51,6 +55,7 @@ public class BlockBenchParser {
         loadElements(object.getAsJsonArray("elements"));
         loadTextures(object.getAsJsonArray("textures"));
         loadBones(object.getAsJsonArray("outliner"),modelTemplate);
+        loadAnimations(object.getAsJsonArray("animations"));
 
         Bukkit.broadcastMessage("Loaded items: "+cachedJavaItems.size());
 
@@ -201,6 +206,70 @@ public class BlockBenchParser {
             if (texture != null) {
                 Bukkit.broadcastMessage("Loaded texture");
                 textures.put(texture.getId(),texture);
+            }
+        }
+    }
+
+    private void loadAnimations(JsonArray array) {
+        for (var item : array) {
+            var animation = loadAnimation(item.getAsJsonObject());
+            modelTemplate.addAnimation(animation);
+            Bukkit.broadcastMessage("§eAnimation "+animation.getName()+" has been added!");
+        }
+    }
+
+    private TemplateAnimation loadAnimation(JsonObject object) {
+        var templateAnimation = new TemplateAnimation(
+                object.get("name").getAsString(),
+                object.get("length").getAsDouble(),
+                LoopMode.valueOf(object.get("loop").getAsString().toUpperCase())
+        );
+        for (var entry : object.get("animators").getAsJsonObject().entrySet()) {
+            var obj = entry.getValue().getAsJsonObject();
+            setupTimeline(templateAnimation,obj);
+        }
+        return templateAnimation;
+    }
+
+    private void setupTimeline(TemplateAnimation templateAnimation, JsonObject object) {
+        var name = object.get("name").getAsString();
+        var timeline = templateAnimation.getTimeline(name);
+        if (timeline == null) {
+            timeline = new Timeline();
+            templateAnimation.addTimeline(name,timeline);
+        }
+        for (var item : object.get("keyframes").getAsJsonArray()) {
+            var obj = item.getAsJsonObject();
+            var type = obj.get("channel").getAsString();
+            var time = obj.get("time").getAsDouble();
+            var interpolation = obj.get("interpolation").getAsString();
+
+            InterpolationType interpolationType;
+            switch (interpolation.toUpperCase()) {
+                case "LINEAR": {
+                    interpolationType = InterpolationType.LINEAR;
+                    break;
+                }
+                default:
+                    interpolationType = InterpolationType.LINEAR;
+                    break;
+            }
+
+            var datapoints = obj.get("data_points").getAsJsonArray().get(0).getAsJsonObject();
+
+            switch (type.toLowerCase()) {
+                case "position": {
+                    Vector vector = new Vector(
+                            -datapoints.get("x").getAsDouble(),
+                            datapoints.get("y").getAsDouble(),
+                            -datapoints.get("z").getAsDouble()
+                    );
+
+                    vector.checkFinite();
+
+                    timeline.addPositionFrame(time,vector,interpolationType);
+                    break;
+                }
             }
         }
     }

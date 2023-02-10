@@ -28,9 +28,13 @@ public class AnimationHandler {
     }
 
     public Vector getPosition(ModelBone modelBone) {
-        Vector finalVector = new Vector();
+        Vector finalVector = new Vector(0d,0d,0d);
         for (var animation : runningAnimations.values()) {
-            finalVector.add(animation.getPosition(modelBone.getTemplateBone().getName()));
+            var vector = animation.getPosition(modelBone.getTemplateBone().getName());
+            if (vector == null) {
+                continue;
+            }
+            finalVector.add(vector);
         }
         return finalVector;
     }
@@ -56,8 +60,4 @@ public class AnimationHandler {
     public void stopAnimations() {
         runningAnimations.clear();
     }
-
-
-
-
 }

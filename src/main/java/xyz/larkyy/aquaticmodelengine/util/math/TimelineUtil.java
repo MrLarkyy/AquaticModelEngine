@@ -1,5 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.util.math;
 
+import org.bukkit.Bukkit;
 import org.bukkit.util.Vector;
 
 public class TimelineUtil {
@@ -11,6 +12,9 @@ public class TimelineUtil {
      * @param d - percentage / progress
      */
     public static Vector lerp(Vector lower, Vector higher, double d) {
+        if (lower.equals(higher)) {
+            return lower;
+        }
         return new Vector(
                 lerp(lower.getX(), higher.getX(), d),
                 lerp(lower.getY(), higher.getY(), d),

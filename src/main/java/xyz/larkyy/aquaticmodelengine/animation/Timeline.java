@@ -1,5 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.animation;
 
+import org.bukkit.Bukkit;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.animation.keyframe.PositionKeyFrame;
 import xyz.larkyy.aquaticmodelengine.util.math.TimelineUtil;
@@ -16,7 +17,7 @@ public class Timeline {
 
     public Vector getPositionFrame(double time) {
         if (positionTimeline.isEmpty()) {
-            return new Vector();
+            return new Vector(0,0,0);
         }
 
         double lowerD = getLower(time,positionTimeline);

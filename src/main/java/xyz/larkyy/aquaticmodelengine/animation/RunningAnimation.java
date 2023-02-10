@@ -1,10 +1,12 @@
 package xyz.larkyy.aquaticmodelengine.animation;
 
+import org.bukkit.Bukkit;
 import org.bukkit.util.Vector;
 
 public class RunningAnimation {
 
     private double speed;
+
     private double time = 0d;
     private AnimationPhase phase = AnimationPhase.PLAYING;
     private final TemplateAnimation templateAnimation;

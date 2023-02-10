@@ -43,6 +43,7 @@ public class SpawnedModel {
     }
 
     public void tick() {
+        animationHandler.update();
         for (var bone : bones.values()) {
             bone.tick();
         }

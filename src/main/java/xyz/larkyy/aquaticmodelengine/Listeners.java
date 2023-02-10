@@ -20,6 +20,7 @@ public class Listeners implements Listener {
                     spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"test2");
                     spawnedModel.applyModel();
                     Bukkit.broadcastMessage("Applying model");
+                    spawnedModel.playAnimation("testanimation",1);
                 } else if (e.getMessage().toLowerCase().contains("remove model")) {
                     if (spawnedModel != null) {
                         AquaticModelEngine.getInstance().getModelHandler().despawnModel(spawnedModel);
