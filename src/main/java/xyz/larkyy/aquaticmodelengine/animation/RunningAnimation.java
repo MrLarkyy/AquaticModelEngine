@@ -1,6 +1,5 @@
 package xyz.larkyy.aquaticmodelengine.animation;
 
-import org.bukkit.Bukkit;
 import org.bukkit.util.Vector;
 
 public class RunningAnimation {

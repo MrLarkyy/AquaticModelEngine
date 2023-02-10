@@ -17,10 +17,18 @@ public class Listeners implements Listener {
             @Override
             public void run() {
                 if (e.getMessage().toLowerCase().contains("apply model")) {
-                    spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"test2");
-                    spawnedModel.applyModel();
-                    Bukkit.broadcastMessage("Applying model");
-                    spawnedModel.playAnimation("testanimation",1);
+                    if (e.getMessage().toLowerCase().contains("robot")) {
+                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"test2");
+                        spawnedModel.applyModel();
+                        Bukkit.broadcastMessage("Applying model");
+                        spawnedModel.playAnimation("testanimation",1);
+                    } else {
+                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"test2");
+                        spawnedModel.applyModel();
+                        Bukkit.broadcastMessage("Applying model");
+                        spawnedModel.playAnimation("testanimation",1);
+                    }
+
                 } else if (e.getMessage().toLowerCase().contains("remove model")) {
                     if (spawnedModel != null) {
                         AquaticModelEngine.getInstance().getModelHandler().despawnModel(spawnedModel);

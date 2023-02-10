@@ -23,15 +23,31 @@ public class Timeline {
         double lowerD = getLower(time,positionTimeline);
         double higherD = getHigher(time,positionTimeline);
 
+
         var lower = positionTimeline.get(lowerD);
         var higher = positionTimeline.get(higherD);
 
+        if (lowerD == higherD) {
+            return lower.getVector();
+        }
+
         var interpolation = getInterpolation(lower,higher);
 
+        // Progress
         double d = (time - lowerD) / (higherD - lowerD);
 
         if (interpolation == InterpolationType.LINEAR) {
             return TimelineUtil.lerp(lower.getVector(),higher.getVector(),d);
+        } else if (interpolation == InterpolationType.SMOOTH) {
+            double lowerLowerD = getLower(lowerD,positionTimeline);
+            double higherHigherD = getHigher(higherD,positionTimeline);
+
+            var lowerLower = positionTimeline.get(lowerLowerD);
+            var higherHigher = positionTimeline.get(higherHigherD);
+
+            return TimelineUtil.smoothLerp(lowerLower.getVector(),lower.getVector(),higher.getVector(),higherHigher.getVector(),d);
+        } else if (interpolation == InterpolationType.STEP) {
+            return lower.getVector();
         }
 
         return new Vector();
