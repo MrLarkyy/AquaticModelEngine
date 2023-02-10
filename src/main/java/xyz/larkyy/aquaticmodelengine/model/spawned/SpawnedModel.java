@@ -2,6 +2,7 @@ package xyz.larkyy.aquaticmodelengine.model.spawned;
 
 import org.bukkit.entity.Entity;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
+import xyz.larkyy.aquaticmodelengine.animation.AnimationHandler;
 import xyz.larkyy.aquaticmodelengine.model.template.ModelTemplate;
 import xyz.larkyy.aquaticmodelengine.model.template.TemplateBone;
 
@@ -11,6 +12,7 @@ public class SpawnedModel {
 
     private final Entity boundEntity;
     private final ModelTemplate modelTemplate;
+    private final AnimationHandler animationHandler;
 
     private final Map<String,ModelBone> bones;
 
@@ -19,6 +21,7 @@ public class SpawnedModel {
         this.modelTemplate = template;
 
         bones = AquaticModelEngine.getInstance().getModelGenerator().getModelReader().loadModelBones(this);
+        animationHandler = new AnimationHandler(this);
     }
 
     public ModelTemplate getModelTemplate() {
@@ -67,5 +70,13 @@ public class SpawnedModel {
 
     public Entity getBoundEntity() {
         return boundEntity;
+    }
+
+    public AnimationHandler getAnimationHandler() {
+        return animationHandler;
+    }
+
+    public void playAnimation(String name, double speed) {
+        getAnimationHandler().playAnimation(name,speed);
     }
 }

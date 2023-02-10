@@ -124,25 +124,27 @@ public class ModelBone {
 
     private Vector getFinalPivot() {
         Vector pivot = templateBone.getOrigin().clone();
+        Vector animationPivot = spawnedModel.getAnimationHandler().getPosition(this);
 
-        if (templateBone.getName().equalsIgnoreCase("bone4")) {
-            //Bukkit.broadcastMessage("Original Vector: " + pivot.getX() + " " + pivot.getY() + " " + pivot.getZ());
-            if (getParent() != null) {
-                //var parentPivot = getParent().getTemplateBone().getOrigin();
-                //Bukkit.broadcastMessage("Parent Vector: " + parentPivot.getX() + " " + parentPivot.getY() + " " + parentPivot.getZ());
-                pivot = getParent().getTemplateBone().getOrigin().clone().subtract(pivot);
-                //Bukkit.broadcastMessage("Subtracted Vector: " + pivot.getX() + " " + pivot.getY() + " " + pivot.getZ());
-                var rotation = getParent().getTemplateBone().getRotation();
-                //Bukkit.broadcastMessage("Rotating around: "+Math.toDegrees(rotation.getX())+" "+Math.toDegrees(rotation.getY())+" "+Math.toDegrees(rotation.getZ()));
-                pivot.rotateAroundX(rotation.getX());
-                pivot.rotateAroundY(-rotation.getY());
-                pivot.rotateAroundZ(-rotation.getZ());
-                //Bukkit.broadcastMessage("Rotated Vector: " + pivot.getX() + " " + pivot.getY() + " " + pivot.getZ());
+        pivot.add(animationPivot);
 
-                pivot = parent.getFinalPivot().subtract(pivot);
-                //Bukkit.broadcastMessage("Final Vector: " + pivot.getX() + " " + pivot.getY() + " " + pivot.getZ());
-            }
+        //Bukkit.broadcastMessage("Original Vector: " + pivot.getX() + " " + pivot.getY() + " " + pivot.getZ());
+        if (getParent() != null) {
+            //var parentPivot = getParent().getTemplateBone().getOrigin();
+            //Bukkit.broadcastMessage("Parent Vector: " + parentPivot.getX() + " " + parentPivot.getY() + " " + parentPivot.getZ());
+            pivot = getParent().getTemplateBone().getOrigin().clone().subtract(pivot);
+            //Bukkit.broadcastMessage("Subtracted Vector: " + pivot.getX() + " " + pivot.getY() + " " + pivot.getZ());
+            var rotation = getParent().getTemplateBone().getRotation();
+            //Bukkit.broadcastMessage("Rotating around: "+Math.toDegrees(rotation.getX())+" "+Math.toDegrees(rotation.getY())+" "+Math.toDegrees(rotation.getZ()));
+            pivot.rotateAroundX(rotation.getX());
+            pivot.rotateAroundY(-rotation.getY());
+            pivot.rotateAroundZ(-rotation.getZ());
+            //Bukkit.broadcastMessage("Rotated Vector: " + pivot.getX() + " " + pivot.getY() + " " + pivot.getZ());
+
+            pivot = parent.getFinalPivot().subtract(pivot);
+            //Bukkit.broadcastMessage("Final Vector: " + pivot.getX() + " " + pivot.getY() + " " + pivot.getZ());
         }
+
         return pivot;
     }
 

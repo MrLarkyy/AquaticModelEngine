@@ -1,7 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.model.template;
 
 import org.bukkit.Bukkit;
-import xyz.larkyy.aquaticmodelengine.model.template.ModelTemplate;
 
 import java.util.HashMap;
 import java.util.Map;

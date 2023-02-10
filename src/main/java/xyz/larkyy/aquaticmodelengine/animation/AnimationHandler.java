@@ -1,9 +1,62 @@
 package xyz.larkyy.aquaticmodelengine.animation;
 
+import org.bukkit.util.Vector;
+import xyz.larkyy.aquaticmodelengine.model.spawned.ModelBone;
+import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModel;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class AnimationHandler {
+
+    private final Map<String,RunningAnimation> runningAnimations = new HashMap<>();
+    private final SpawnedModel spawnedModel;
+
+    public AnimationHandler(SpawnedModel spawnedModel) {
+        this.spawnedModel = spawnedModel;
+    }
+
+    public void update() {
+        for (var entry : runningAnimations.entrySet()) {
+            var animation = entry.getValue();
+            var key = entry.getKey();
+
+            if (!animation.update()) {
+                runningAnimations.remove(key);
+            }
+        }
+    }
+
+    public Vector getPosition(ModelBone modelBone) {
+        Vector finalVector = new Vector();
+        for (var animation : runningAnimations.values()) {
+            finalVector.add(animation.getPosition(modelBone.getTemplateBone().getName()));
+        }
+        return finalVector;
+    }
+
+    public void playAnimation(String name, double speed) {
+        TemplateAnimation templateAnimation = spawnedModel.getModelTemplate().getAnimation(name);
+        if (templateAnimation == null) {
+            return;
+        }
+        var runningAnimation = new RunningAnimation(templateAnimation,speed);
+        runningAnimations.put(name,runningAnimation);
+    }
+
+    public boolean isPlaying(String name) {
+        var running = runningAnimations.get(name);
+        return running != null;
+    }
+
+    public void stopAnimation(String name) {
+        runningAnimations.remove(name);
+    }
+
+    public void stopAnimations() {
+        runningAnimations.clear();
+    }
+
 
 
 
