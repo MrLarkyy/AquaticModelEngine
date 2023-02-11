@@ -77,6 +77,34 @@ public class Quaternion {
         return new EulerAngle(eulerX,eulerY,eulerZ);
     }
 
+    public EulerAngle getEulerAnglesXYZ2() {
+        double x2 = x+x, y2 = y+y, z2 = z+z;
+        double xx = x * x2, xy = x * y2, xz = x * z2;
+        double yy = y * y2, yz = y * z2, zz = z * z2;
+        double wx = w * x2, wy = w * y2, wz = w * z2;
+
+        double ex, ey, ez,
+                m11 = 1 - (yy + zz),
+                m12 = xy - wz,
+                m13 = -xz - wy,
+                m22 = 1-(xx+zz),
+                m23 = yz - wx,
+                m32 = yz + wx,
+                m33 = 1 - (xx + yy);
+
+        ey = Math.asin(Math.clamp(m13,-1,1));
+        if (Math.abs(m13) < 0.9999999) {
+            ex = Math.atan2(-m23,m33);
+            ez = Math.atan2(-m12,m11);
+        }
+        else {
+            ex = Math.atan2(m32,m22);
+            ez = 0;
+        }
+
+        return new EulerAngle(ex,-ey,ez);
+    }
+
     public float w() {
         return w;
     }

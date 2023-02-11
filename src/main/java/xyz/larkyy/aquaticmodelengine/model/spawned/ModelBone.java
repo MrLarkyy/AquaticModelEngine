@@ -1,11 +1,13 @@
 package xyz.larkyy.aquaticmodelengine.model.spawned;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.model.template.TemplateBone;
@@ -44,7 +46,7 @@ public class ModelBone {
         if (spawnedModel.getBoundEntity() == null) {
             return;
         }
-        var loc = spawnedModel.getBoundEntity().getLocation().clone();
+        var loc = spawnedModel.getBoundEntity().getLocation().clone().add(1.5,0,0);
 
         var finalPivot = getFinalPivot().clone().multiply(0.0625);
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
@@ -82,8 +84,10 @@ public class ModelBone {
             entity.setRotation(yaw,0);
             var is = new ItemStack(Material.LEATHER_HORSE_ARMOR);
             var im = is.getItemMeta();
-            im.setCustomModelData(templateBone.getModelId());
-            is.setItemMeta(im);
+            LeatherArmorMeta lam = (LeatherArmorMeta) im;
+            lam.setColor(Color.fromRGB(255,255,255));
+            lam.setCustomModelData(templateBone.getModelId());
+            is.setItemMeta(lam);
             entity.getEquipment().setHelmet(is);
             entity.setHeadPose(getFinalRotation());
         });
@@ -104,7 +108,6 @@ public class ModelBone {
         EulerAngle rotation = templateBone.getRotation();
 
         var animationRotation = spawnedModel.getAnimationHandler().getRotation(this);
-
         /*
         if (getParent() == null) {
             animationRotation = animationRotation.setX(animationRotation.getX()+Math.toRadians(180));
@@ -120,7 +123,10 @@ public class ModelBone {
 
 
         rotation = rotation.add(-animationRotation.getX(),animationRotation.getY(),animationRotation.getZ());
-
+        if (getTemplateBone().getName().equalsIgnoreCase("turbo")) {
+            Bukkit.broadcastMessage(" ");
+            Bukkit.broadcastMessage("Calculated Angle: "+Math.toDegrees(rotation.getX())+" "+Math.toDegrees(rotation.getY())+" "+Math.toDegrees(rotation.getZ()));
+        }
 
         if (getParent() != null) {
             //Bukkit.broadcastMessage("Previous "+getTemplateBone().getName()+" rotation: "+Math.toDegrees(rotation.getX())+" "+Math.toDegrees(rotation.getY())+" "+Math.toDegrees(rotation.getZ()));
@@ -130,15 +136,21 @@ public class ModelBone {
                     parentRotation.getY(),
                     parentRotation.getZ()
             );
+            if (getTemplateBone().getName().equalsIgnoreCase("turbo")) {
+                Bukkit.broadcastMessage("Parent Angle: "+Math.toDegrees(parentRotation.getX())+" "+Math.toDegrees(parentRotation.getY())+" "+Math.toDegrees(parentRotation.getZ()));
+            }
 
             Quaternion startQuat = new Quaternion(parentRotation);
             Quaternion rotationQuat = new Quaternion(rotation);
 
             Quaternion resultQuat = rotationQuat.mul(startQuat);
-            var resultEuler = resultQuat.getEulerAnglesXYZ();
+            var resultEuler = resultQuat.getEulerAnglesXYZ2();
             resultEuler = resultEuler.setX(-resultEuler.getX());
             rotation = resultEuler;
             //Bukkit.broadcastMessage(getTemplateBone().getName()+" rotation: "+Math.toDegrees(rotation.getX())+" "+Math.toDegrees(rotation.getY())+" "+Math.toDegrees(rotation.getZ()));
+        }
+        if (getTemplateBone().getName().equalsIgnoreCase("turbo")) {
+            Bukkit.broadcastMessage("Calculated Angle 2: "+Math.toDegrees(rotation.getX())+" "+Math.toDegrees(rotation.getY())+" "+Math.toDegrees(rotation.getZ()));
         }
 
         return rotation;
