@@ -50,6 +50,7 @@ public class ModelBone {
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
         var finalLocation = loc.clone().add(finalPivot);
 
+        ((ArmorStand)boneEntity).setHeadPose(getFinalRotation());
         boneEntity.teleport(
                 finalLocation
         );
@@ -101,6 +102,25 @@ public class ModelBone {
 
     private EulerAngle getFinalRotation() {
         EulerAngle rotation = templateBone.getRotation();
+
+        var animationRotation = spawnedModel.getAnimationHandler().getRotation(this);
+
+        /*
+        if (getParent() == null) {
+            animationRotation = animationRotation.setX(animationRotation.getX()+Math.toRadians(180));
+        }
+
+        Quaternion quat = new Quaternion(rotation);
+        Quaternion animationQuat = new Quaternion(animationRotation);
+
+        Quaternion result = animationQuat.mul(quat);
+        rotation = result.getEulerAnglesXYZ();
+
+         */
+
+
+        rotation = rotation.add(-animationRotation.getX(),animationRotation.getY(),animationRotation.getZ());
+
 
         if (getParent() != null) {
             //Bukkit.broadcastMessage("Previous "+getTemplateBone().getName()+" rotation: "+Math.toDegrees(rotation.getX())+" "+Math.toDegrees(rotation.getY())+" "+Math.toDegrees(rotation.getZ()));
