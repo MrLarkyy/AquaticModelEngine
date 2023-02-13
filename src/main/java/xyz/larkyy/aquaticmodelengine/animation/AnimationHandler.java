@@ -18,14 +18,7 @@ public class AnimationHandler {
     }
 
     public void update() {
-        for (var entry : runningAnimations.entrySet()) {
-            var animation = entry.getValue();
-            var key = entry.getKey();
-
-            if (!animation.update()) {
-                runningAnimations.remove(key);
-            }
-        }
+        this.runningAnimations.entrySet().removeIf(entry -> !entry.getValue().update());
     }
 
     public Vector getPosition(ModelBone modelBone) {
