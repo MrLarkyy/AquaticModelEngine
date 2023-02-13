@@ -15,7 +15,7 @@ public class TimelineUtil {
             return lower;
         }
         return new Vector(
-                -lerp(lower.getX(), higher.getX(), d),
+                lerp(lower.getX(), higher.getX(), d),
                 lerp(lower.getY(), higher.getY(), d),
                 lerp(lower.getZ(), higher.getZ(), d)
         );
@@ -32,7 +32,7 @@ public class TimelineUtil {
     // Vectors - points of our curve
     public static Vector lerp(Vector v1, Vector v2, double d1, double d2) {
         return new Vector(
-                -lerp(v1.getX(), v2.getX(), d1, d2),
+                lerp(v1.getX(), v2.getX(), d1, d2),
                 lerp(v1.getY(), v2.getY(), d1, d2),
                 lerp(v1.getZ(), v2.getZ(), d1, d2));
     }
