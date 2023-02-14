@@ -28,7 +28,7 @@ public class Quaternion {
 
     public Quaternion(EulerAngle eulerAngle) {
         w = 1.0f;
-        rotationXYZ(eulerAngle);
+        rotationXYZ2((float) eulerAngle.getX(), (float) eulerAngle.getY(), (float) eulerAngle.getZ());
     }
 
     public Quaternion rotationXYZ(float angleX, float angleY, float angleZ) {
@@ -48,6 +48,21 @@ public class Quaternion {
         y = cx*sycz - sx*cysz;
         z = cx*cysz + sx*sycz;
 
+        return this;
+    }
+
+    public Quaternion rotationXYZ2(float angleX, float angleY, float angleZ) {
+        double cX = Math.cos(angleX*0.5);
+        double cY = Math.cos(angleY*-0.5);
+        double cZ = Math.cos(angleZ*0.5);
+        double sX = Math.sin(angleX*0.5);
+        double sY = Math.sin(angleY*-0.5);
+        double sZ = Math.sin(angleZ*0.5);
+
+        x = (float) (sX *cY*cZ+cX*sY*sZ);
+        y = (float) (cX*sY*cZ-sX*cY*sZ);
+        z = (float) (cX*cY*sZ+sX*sY*cZ);
+        w = (float) (cX*cY*cZ-sX*sY*sZ);
         return this;
     }
 
@@ -86,7 +101,7 @@ public class Quaternion {
         double ex, ey, ez,
                 m11 = 1 - (yy + zz),
                 m12 = xy - wz,
-                m13 = -xz - wy,
+                m13 = xz + wy,
                 m22 = 1-(xx+zz),
                 m23 = yz - wx,
                 m32 = yz + wx,

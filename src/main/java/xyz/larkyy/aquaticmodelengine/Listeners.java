@@ -22,7 +22,13 @@ public class Listeners implements Listener {
                         spawnedModel.applyModel();
                         Bukkit.broadcastMessage("Applying model");
                         spawnedModel.playAnimation("idle",1);
-                    } else {
+                    } else if (e.getMessage().toLowerCase().contains("otter")) {
+                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"big_otter");
+                        spawnedModel.applyModel();
+                        Bukkit.broadcastMessage("Applying model");
+                        spawnedModel.playAnimation("death",1);
+                    }
+                    else {
                         spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"test2");
                         spawnedModel.applyModel();
                         Bukkit.broadcastMessage("Applying model");

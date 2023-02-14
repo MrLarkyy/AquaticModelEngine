@@ -1,5 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.model.spawned;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -235,12 +236,12 @@ public class ModelBone {
         rotation = result.getEulerAnglesXYZ();
 
          */
-        rotation = rotation.add(-animationRotation.getX(),animationRotation.getY(),animationRotation.getZ());
+        rotation = rotation.add(animationRotation.getX(),animationRotation.getY(),animationRotation.getZ());
 
         if (getParent() != null) {
             var parentRotation = parentAngle;
             parentRotation = new EulerAngle(
-                    -parentRotation.getX(),
+                    parentRotation.getX(),
                     parentRotation.getY(),
                     parentRotation.getZ()
             );
@@ -250,7 +251,7 @@ public class ModelBone {
 
             Quaternion resultQuat = rotationQuat.mul(startQuat);
             var resultEuler = resultQuat.getEulerAnglesXYZ2();
-            resultEuler = resultEuler.setX(-resultEuler.getX());
+            resultEuler = resultEuler.setX(resultEuler.getX());
             rotation = resultEuler;
         }
 
