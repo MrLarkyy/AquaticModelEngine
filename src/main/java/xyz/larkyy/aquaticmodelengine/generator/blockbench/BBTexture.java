@@ -5,9 +5,9 @@ public class BBTexture {
     private final String name;
     private final String uuid;
     private final String source;
-    private final int id;
+    private final String id;
 
-    public BBTexture(String name, String uuid, String source, int id) {
+    public BBTexture(String name, String uuid, String source, String id) {
         this.name = name;
         this.uuid = uuid;
         this.source = source;
@@ -26,7 +26,7 @@ public class BBTexture {
         return source;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 }

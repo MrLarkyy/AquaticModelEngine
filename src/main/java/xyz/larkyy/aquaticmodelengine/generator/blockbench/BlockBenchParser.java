@@ -200,17 +200,19 @@ public class BlockBenchParser {
     }
 
     private void loadTextures(JsonArray array) {
+        if (array == null) return;
         Gson gson = new Gson();
         for (var item : array) {
             var texture = gson.fromJson(item,BBTexture.class);
             if (texture != null) {
                 Bukkit.broadcastMessage("Loaded texture");
-                textures.put(texture.getId(),texture);
+                textures.put(textures.size(), texture);
             }
         }
     }
 
     private void loadAnimations(JsonArray array) {
+        if (array == null) return;
         for (var item : array) {
             var animation = loadAnimation(item.getAsJsonObject());
             modelTemplate.addAnimation(animation);
