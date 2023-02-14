@@ -1,6 +1,5 @@
 package xyz.larkyy.aquaticmodelengine.model.spawned;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -40,29 +39,6 @@ public class ModelBone {
     }
 
     /*
-    public void tick() {
-        if (boneEntity == null) {
-            return;
-        }
-        if (spawnedModel.getBoundEntity() == null) {
-            return;
-        }
-        var loc = spawnedModel.getBoundEntity().getLocation().clone().add(1.5,0,0);
-
-        var finalPivot = getFinalPivot().clone().multiply(0.0625);
-        finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
-        var finalLocation = loc.clone().add(finalPivot);
-
-        ((ArmorStand)boneEntity).setHeadPose(getFinalRotation());
-        boneEntity.teleport(
-                finalLocation
-        );
-        boneEntity.setRotation(loc.getYaw(),0);
-    }
-
-     */
-
-    /*
     RECODED VERSION
     */
     public void tick2(Vector parentPivot, EulerAngle parentAngle) {
@@ -95,38 +71,6 @@ public class ModelBone {
     public TemplateBone getTemplateBone() {
         return templateBone;
     }
-
-    /*
-    public void spawnModel(Location location) {
-        var yaw = location.getYaw();
-
-        if (boneEntity != null) {
-            removeModel();
-        }
-
-        var finalPivot = getFinalPivot().clone().multiply(0.0625);
-        finalPivot.rotateAroundY(-Math.toRadians(yaw));
-
-        var loc = location.clone();
-        loc.add(finalPivot);
-        boneEntity = loc.getWorld().spawn(loc, ArmorStand.class, entity -> {
-            entity.setGravity(false);
-            entity.setMarker(true);
-            entity.setPersistent(false);
-            entity.setInvisible(true);
-            entity.setRotation(yaw,0);
-            var is = new ItemStack(Material.LEATHER_HORSE_ARMOR);
-            var im = is.getItemMeta();
-            LeatherArmorMeta lam = (LeatherArmorMeta) im;
-            lam.setColor(Color.fromRGB(255,255,255));
-            lam.setCustomModelData(templateBone.getModelId());
-            is.setItemMeta(lam);
-            entity.getEquipment().setHelmet(is);
-            entity.setHeadPose(getFinalRotation());
-        });
-    }
-
-     */
 
     public void spawnModel2(Vector parentPivot, EulerAngle parentAngle) {
         if (spawnedModel.getBoundEntity() == null) {
@@ -208,7 +152,7 @@ public class ModelBone {
             Quaternion rotationQuat = new Quaternion(rotation);
 
             Quaternion resultQuat = rotationQuat.mul(startQuat);
-            var resultEuler = resultQuat.getEulerAnglesXYZ2();
+            var resultEuler = resultQuat.getEulerAnglesXYZ();
             resultEuler = resultEuler.setX(-resultEuler.getX());
             rotation = resultEuler;
         }
@@ -250,7 +194,7 @@ public class ModelBone {
             Quaternion rotationQuat = new Quaternion(rotation);
 
             Quaternion resultQuat = rotationQuat.mul(startQuat);
-            var resultEuler = resultQuat.getEulerAnglesXYZ2();
+            var resultEuler = resultQuat.getEulerAnglesXYZ();
             resultEuler = resultEuler.setX(resultEuler.getX());
             rotation = resultEuler;
         }
