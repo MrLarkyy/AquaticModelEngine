@@ -76,5 +76,10 @@
             <scope>provided</scope>
             <classifier>remapped-mojang</classifier>
         </dependency>
+        <dependency>
+            <groupId>xyz.larkyy</groupId>
+            <artifactId>API</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 </project>
