@@ -30,9 +30,8 @@ public class EntityHandlerImpl implements IEntityHandler {
     private final Map<Integer, Entity> entities = new HashMap<>();
 
     @Override
-    public FakeArmorStand spawn(Location location) {
-
-        return new FakeArmorStandImpl(location);
+    public FakeArmorStand spawn(Location location, Consumer<ArmorStand> factory) {
+        return new FakeArmorStandImpl(location, factory);
     }
 
     public void updateEntity(int id, Consumer<org.bukkit.entity.Entity> factory) {

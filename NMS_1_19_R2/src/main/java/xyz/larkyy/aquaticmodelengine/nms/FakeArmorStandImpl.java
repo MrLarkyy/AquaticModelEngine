@@ -4,16 +4,15 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Rotations;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
@@ -26,12 +25,13 @@ import xyz.larkyy.aquaticmodelengine.api.FakeArmorStand;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class FakeArmorStandImpl implements FakeArmorStand {
 
     private final ArmorStand armorStand;
 
-    public FakeArmorStandImpl(Location location) {
+    public FakeArmorStandImpl(Location location, Consumer<org.bukkit.entity.ArmorStand> factory) {
         CraftWorld cw = (CraftWorld) location.getWorld();
         ServerLevel worldServer = cw.getHandle();
         this.armorStand = EntityType.ARMOR_STAND.create(
@@ -44,10 +44,16 @@ public class FakeArmorStandImpl implements FakeArmorStand {
                 true,
                 false
         );
+        factory.accept((org.bukkit.entity.ArmorStand) armorStand.getBukkitEntity());
     }
 
     public void teleport(Location location) {
+        armorStand.getBukkitEntity().teleport(location);
 
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            final var packet = new ClientboundTeleportEntityPacket(armorStand);
+            ((CraftPlayer)p).getHandle().connection.connection.send(packet);
+        });
     }
 
     public void setHeadPose(EulerAngle eulerAngle) {
@@ -60,14 +66,21 @@ public class FakeArmorStandImpl implements FakeArmorStand {
 
     public void hide(Player player) {
         ((CraftPlayer) player).getHandle().connection.connection.send(hidePacket());
+        Bukkit.broadcastMessage("Hiding");
     }
 
     public void show(Player player) {
+        Bukkit.broadcastMessage("Showing");
         var packets = showPackets();
 
         for (var packet : packets) {
             ((CraftPlayer) player).getHandle().connection.connection.send(packet);
         }
+    }
+
+    @Override
+    public void remove() {
+        armorStand.remove(Entity.RemovalReason.DISCARDED);
     }
 
     @Override
@@ -82,9 +95,6 @@ public class FakeArmorStandImpl implements FakeArmorStand {
 
     private List<Packet<?>> showPackets() {
         List<Packet<?>> packets = new ArrayList<>();
-
-        var bukkitEntity = armorStand.getBukkitEntity();
-        var location = bukkitEntity.getLocation();
         var packet = new ClientboundAddEntityPacket(
                 armorStand.getId(),
                 armorStand.getUUID(),

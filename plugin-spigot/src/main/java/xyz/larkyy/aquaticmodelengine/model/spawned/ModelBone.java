@@ -1,14 +1,15 @@
 package xyz.larkyy.aquaticmodelengine.model.spawned;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
+import xyz.larkyy.aquaticmodelengine.api.FakeArmorStand;
 import xyz.larkyy.aquaticmodelengine.model.template.TemplateBone;
 import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class ModelBone {
     private final TemplateBone templateBone;
-    private Entity boneEntity = null;
+    private FakeArmorStand boneEntity = null;
     private final List<ModelBone> children = new ArrayList<>();
     private ModelBone parent = null;
     private final SpawnedModel spawnedModel;
@@ -61,11 +62,11 @@ public class ModelBone {
         finalPivot.multiply(0.0625d);
         var finalLocation = loc.clone().add(finalPivot);
 
-        ((ArmorStand)boneEntity).setHeadPose(finalRotation);
+        boneEntity.setHeadPose(finalRotation);
         boneEntity.teleport(
                 finalLocation
         );
-        boneEntity.setRotation(loc.getYaw(),0);
+        //boneEntity.setRotation(loc.getYaw(),0);
     }
 
     public TemplateBone getTemplateBone() {
@@ -80,10 +81,6 @@ public class ModelBone {
 
         var yaw = loc.getYaw();
 
-        if (boneEntity != null) {
-            removeModel();
-        }
-
         var finalPivot = getFinalPivot2(parentPivot,parentAngle).clone();
         var finalRotation = getFinalRotation2(parentAngle);
 
@@ -91,10 +88,36 @@ public class ModelBone {
             bone.spawnModel2(finalPivot.clone(),finalRotation);
         }
 
+        if (boneEntity != null) {
+            removeModel();
+        }
+
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
         finalPivot.multiply(0.0625d);
 
         loc.add(finalPivot);
+
+        boneEntity = AquaticModelEngine.getInstance().getEntityHandler().spawn(loc, armorStand -> {
+            armorStand.setGravity(false);
+            armorStand.setMarker(true);
+            armorStand.setPersistent(false);
+            armorStand.setInvisible(true);
+            armorStand.setRotation(yaw,0);
+            var is = new ItemStack(Material.LEATHER_HORSE_ARMOR);
+            var im = is.getItemMeta();
+            LeatherArmorMeta lam = (LeatherArmorMeta) im;
+            lam.setColor(Color.fromRGB(255,255,255));
+            lam.setCustomModelData(templateBone.getModelId());
+            is.setItemMeta(lam);
+            armorStand.getEquipment().setHelmet(is);
+            armorStand.setHeadPose(finalRotation);
+        });
+
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            boneEntity.show(p);
+        });
+
+        /*
         boneEntity = loc.getWorld().spawn(loc, ArmorStand.class, entity -> {
             entity.setGravity(false);
             entity.setMarker(true);
@@ -110,9 +133,11 @@ public class ModelBone {
             entity.getEquipment().setHelmet(is);
             entity.setHeadPose(finalRotation);
         });
+         */
     }
 
     public void removeModel() {
+        Bukkit.getOnlinePlayers().forEach(p -> boneEntity.hide(p));
         boneEntity.remove();
     }
 
@@ -240,7 +265,7 @@ public class ModelBone {
         return pivot;
     }
 
-    public Entity getBoneEntity() {
+    public FakeArmorStand getBoneEntity() {
         return boneEntity;
     }
 }

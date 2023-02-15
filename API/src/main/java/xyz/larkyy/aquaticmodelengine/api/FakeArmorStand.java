@@ -7,13 +7,15 @@ import org.bukkit.util.EulerAngle;
 
 public interface FakeArmorStand {
 
-     void teleport(Location location);
+    void teleport(Location location);
 
     void setHeadPose(EulerAngle eulerAngle);
 
     void hide(Player player);
 
     void show(Player player);
+
+    void remove();
 
     int getId();
 
