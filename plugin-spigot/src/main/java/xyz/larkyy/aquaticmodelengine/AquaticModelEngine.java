@@ -28,6 +28,7 @@ public final class AquaticModelEngine extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Listeners(),this);
 
         modelHandler.startTicking();
+
     }
 
     @Override
