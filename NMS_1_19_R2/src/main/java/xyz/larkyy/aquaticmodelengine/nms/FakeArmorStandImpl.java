@@ -57,7 +57,9 @@ public class FakeArmorStandImpl implements FakeArmorStand {
     }
 
     public void setHeadPose(EulerAngle eulerAngle) {
-        armorStand.setHeadPose(new Rotations((float) eulerAngle.getX(), (float) eulerAngle.getY(), (float) eulerAngle.getZ()));
+        armorStand.setHeadPose(new Rotations((float) Math.toDegrees(eulerAngle.getX()),
+                (float) Math.toDegrees(eulerAngle.getY()),
+                (float) Math.toDegrees(eulerAngle.getZ())));
     }
 
     public void setHeadItem(ItemStack itemStack) {
@@ -81,6 +83,15 @@ public class FakeArmorStandImpl implements FakeArmorStand {
     @Override
     public void remove() {
         armorStand.remove(Entity.RemovalReason.DISCARDED);
+    }
+
+    @Override
+    public void updateHeadRotation(Player player) {
+        var packets = updateMetaPackets();
+
+        for (var packet : packets) {
+            ((CraftPlayer) player).getHandle().connection.connection.send(packet);
+        }
     }
 
     @Override

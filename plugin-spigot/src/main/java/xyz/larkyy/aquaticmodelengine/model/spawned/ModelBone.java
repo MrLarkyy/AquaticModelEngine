@@ -66,6 +66,11 @@ public class ModelBone {
         boneEntity.teleport(
                 finalLocation
         );
+
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            boneEntity.updateHeadRotation(p);
+        });
+
         //boneEntity.setRotation(loc.getYaw(),0);
     }
 
