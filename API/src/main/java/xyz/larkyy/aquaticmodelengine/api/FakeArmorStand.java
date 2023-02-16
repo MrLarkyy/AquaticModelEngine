@@ -19,6 +19,8 @@ public interface FakeArmorStand {
 
     void updateHeadRotation(Player player);
 
+    void updatePosition(Player player);
+
     int getId();
 
     ArmorStand getArmorstand();

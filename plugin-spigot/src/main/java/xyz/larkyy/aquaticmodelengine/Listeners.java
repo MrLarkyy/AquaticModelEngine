@@ -1,6 +1,7 @@
 package xyz.larkyy.aquaticmodelengine;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Pig;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -17,19 +18,20 @@ public class Listeners implements Listener {
             @Override
             public void run() {
                 if (e.getMessage().toLowerCase().contains("apply model")) {
+                    Pig pig = e.getPlayer().getLocation().getWorld().spawn(e.getPlayer().getLocation(), Pig.class);
                     if (e.getMessage().toLowerCase().contains("robot")) {
-                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"tutorialbot");
+                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(pig,"tutorialbot");
                         spawnedModel.applyModel();
                         Bukkit.broadcastMessage("Applying model");
                         spawnedModel.playAnimation("idle",1);
                     } else if (e.getMessage().toLowerCase().contains("otter")) {
-                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"big_otter");
+                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(pig,"big_otter");
                         spawnedModel.applyModel();
                         Bukkit.broadcastMessage("Applying model");
                         spawnedModel.playAnimation("death",1);
                     }
                     else {
-                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(e.getPlayer(),"test2");
+                        spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(pig,"test2");
                         spawnedModel.applyModel();
                         Bukkit.broadcastMessage("Applying model");
                         spawnedModel.playAnimation("testanimation",1);

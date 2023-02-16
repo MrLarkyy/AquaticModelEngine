@@ -12,7 +12,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
@@ -23,7 +22,6 @@ import org.bukkit.util.EulerAngle;
 import xyz.larkyy.aquaticmodelengine.api.FakeArmorStand;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -49,11 +47,6 @@ public class FakeArmorStandImpl implements FakeArmorStand {
 
     public void teleport(Location location) {
         armorStand.getBukkitEntity().teleport(location);
-
-        Bukkit.getOnlinePlayers().forEach(p -> {
-            final var packet = new ClientboundTeleportEntityPacket(armorStand);
-            ((CraftPlayer)p).getHandle().connection.connection.send(packet);
-        });
     }
 
     public void setHeadPose(EulerAngle eulerAngle) {
@@ -68,11 +61,9 @@ public class FakeArmorStandImpl implements FakeArmorStand {
 
     public void hide(Player player) {
         ((CraftPlayer) player).getHandle().connection.connection.send(hidePacket());
-        Bukkit.broadcastMessage("Hiding");
     }
 
     public void show(Player player) {
-        Bukkit.broadcastMessage("Showing");
         var packets = showPackets();
 
         for (var packet : packets) {
@@ -92,6 +83,12 @@ public class FakeArmorStandImpl implements FakeArmorStand {
         for (var packet : packets) {
             ((CraftPlayer) player).getHandle().connection.connection.send(packet);
         }
+    }
+
+    @Override
+    public void updatePosition(Player player) {
+        final var packet = new ClientboundTeleportEntityPacket(armorStand);
+        ((CraftPlayer)player).getHandle().connection.connection.send(packet);
     }
 
     @Override
@@ -140,7 +137,7 @@ public class FakeArmorStandImpl implements FakeArmorStand {
 
     private List<Packet<?>> updateEquipmentPackets() {
         List<Packet<?>> packets = new ArrayList<>();
-        var packet = new ClientboundSetEquipmentPacket(armorStand.getId(), Arrays.asList(
+        var packet = new ClientboundSetEquipmentPacket(armorStand.getId(), List.of(
                 new Pair<>(EquipmentSlot.HEAD, armorStand.getItemBySlot(EquipmentSlot.HEAD))
         ));
         packets.add(packet);

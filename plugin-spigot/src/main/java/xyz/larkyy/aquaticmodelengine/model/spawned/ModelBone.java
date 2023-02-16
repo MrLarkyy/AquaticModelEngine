@@ -4,12 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
-import xyz.larkyy.aquaticmodelengine.api.FakeArmorStand;
 import xyz.larkyy.aquaticmodelengine.model.template.TemplateBone;
 import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
 
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ModelBone {
     private final TemplateBone templateBone;
-    private FakeArmorStand boneEntity = null;
+    private BoneEntity boneEntity = null;
     private final List<ModelBone> children = new ArrayList<>();
     private ModelBone parent = null;
     private final SpawnedModel spawnedModel;
@@ -67,10 +67,6 @@ public class ModelBone {
                 finalLocation
         );
 
-        Bukkit.getOnlinePlayers().forEach(p -> {
-            boneEntity.updateHeadRotation(p);
-        });
-
         //boneEntity.setRotation(loc.getYaw(),0);
     }
 
@@ -102,7 +98,7 @@ public class ModelBone {
 
         loc.add(finalPivot);
 
-        boneEntity = AquaticModelEngine.getInstance().getEntityHandler().spawn(loc, armorStand -> {
+        boneEntity = new BoneEntity(this,AquaticModelEngine.getInstance().getEntityHandler().spawn(loc, armorStand -> {
             armorStand.setGravity(false);
             armorStand.setMarker(true);
             armorStand.setPersistent(false);
@@ -116,29 +112,11 @@ public class ModelBone {
             is.setItemMeta(lam);
             armorStand.getEquipment().setHelmet(is);
             armorStand.setHeadPose(finalRotation);
-        });
+        }));
 
         Bukkit.getOnlinePlayers().forEach(p -> {
             boneEntity.show(p);
         });
-
-        /*
-        boneEntity = loc.getWorld().spawn(loc, ArmorStand.class, entity -> {
-            entity.setGravity(false);
-            entity.setMarker(true);
-            entity.setPersistent(false);
-            entity.setInvisible(true);
-            entity.setRotation(yaw,0);
-            var is = new ItemStack(Material.LEATHER_HORSE_ARMOR);
-            var im = is.getItemMeta();
-            LeatherArmorMeta lam = (LeatherArmorMeta) im;
-            lam.setColor(Color.fromRGB(255,255,255));
-            lam.setCustomModelData(templateBone.getModelId());
-            is.setItemMeta(lam);
-            entity.getEquipment().setHelmet(is);
-            entity.setHeadPose(finalRotation);
-        });
-         */
     }
 
     public void removeModel() {
@@ -156,18 +134,6 @@ public class ModelBone {
         EulerAngle rotation = templateBone.getRotation();
 
         var animationRotation = spawnedModel.getAnimationHandler().getRotation(this);
-        /*
-        if (getParent() == null) {
-            animationRotation = animationRotation.setX(animationRotation.getX()+Math.toRadians(180));
-        }
-
-        Quaternion quat = new Quaternion(rotation);
-        Quaternion animationQuat = new Quaternion(animationRotation);
-
-        Quaternion result = animationQuat.mul(quat);
-        rotation = result.getEulerAnglesXYZ();
-
-         */
         rotation = rotation.add(-animationRotation.getX(),animationRotation.getY(),animationRotation.getZ());
 
         if (getParent() != null) {
@@ -198,18 +164,6 @@ public class ModelBone {
         EulerAngle rotation = templateBone.getRotation();
 
         var animationRotation = spawnedModel.getAnimationHandler().getRotation(this);
-        /*
-        if (getParent() == null) {
-            animationRotation = animationRotation.setX(animationRotation.getX()+Math.toRadians(180));
-        }
-
-        Quaternion quat = new Quaternion(rotation);
-        Quaternion animationQuat = new Quaternion(animationRotation);
-
-        Quaternion result = animationQuat.mul(quat);
-        rotation = result.getEulerAnglesXYZ();
-
-         */
         rotation = rotation.add(animationRotation.getX(),animationRotation.getY(),animationRotation.getZ());
 
         if (getParent() != null) {
@@ -270,7 +224,19 @@ public class ModelBone {
         return pivot;
     }
 
-    public FakeArmorStand getBoneEntity() {
+    public void show(Player player) {
+        boneEntity.show(player);
+    }
+
+    public void hide(Player player) {
+        boneEntity.hide(player);
+    }
+
+    public SpawnedModel getSpawnedModel() {
+        return spawnedModel;
+    }
+
+    public BoneEntity getBoneEntity() {
         return boneEntity;
     }
 }
