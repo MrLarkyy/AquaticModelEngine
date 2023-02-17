@@ -28,7 +28,6 @@ public class SpawnedModelImpl extends SpawnedModel {
         }
     }
 
-
     @Override
     public void addParentBone(ModelBone modelBone) {
         if (modelBone.getParent() == null) {

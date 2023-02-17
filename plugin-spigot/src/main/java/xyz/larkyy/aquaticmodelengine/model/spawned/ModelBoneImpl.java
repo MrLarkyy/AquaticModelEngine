@@ -28,7 +28,7 @@ public class ModelBoneImpl extends ModelBone {
         if (getSpawnedModel().getModelHolder() == null) {
             return;
         }
-        var loc = getSpawnedModel().getModelHolder().getLocation().clone().add(1.5,0,0);
+        var loc = getSpawnedModel().getModelHolder().getLocation().clone().add(0,-1.4375,0);
 
         var finalPivot = getFinalPivot(parentPivot,parentAngle).clone();
         var finalRotation = getFinalRotation(parentAngle);
