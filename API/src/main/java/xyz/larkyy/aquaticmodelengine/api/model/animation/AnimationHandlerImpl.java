@@ -1,29 +1,26 @@
-package xyz.larkyy.aquaticmodelengine.animation;
+package xyz.larkyy.aquaticmodelengine.api.model.animation;
 
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-import xyz.larkyy.aquaticmodelengine.model.spawned.ModelBone;
-import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModel;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 
-import java.util.HashMap;
-import java.util.Map;
+public class AnimationHandlerImpl extends AnimationHandler {
 
-public class AnimationHandler {
 
-    private final Map<String,RunningAnimation> runningAnimations = new HashMap<>();
-    private final SpawnedModel spawnedModel;
-
-    public AnimationHandler(SpawnedModel spawnedModel) {
-        this.spawnedModel = spawnedModel;
+    public AnimationHandlerImpl(SpawnedModel spawnedModel) {
+        super(spawnedModel);
     }
 
+    @Override
     public void update() {
-        this.runningAnimations.entrySet().removeIf(entry -> !entry.getValue().update());
+        this.getRunningAnimations().entrySet().removeIf(entry -> !entry.getValue().update());
     }
 
+    @Override
     public Vector getPosition(ModelBone modelBone) {
         Vector finalVector = new Vector(0d,0d,0d);
-        for (var animation : runningAnimations.values()) {
+        for (var animation : getRunningAnimations().values()) {
             var vector = animation.getPosition(modelBone.getTemplateBone().getName());
             if (vector == null) {
                 continue;
@@ -33,9 +30,10 @@ public class AnimationHandler {
         return finalVector;
     }
 
+    @Override
     public EulerAngle getRotation(ModelBone modelBone) {
         EulerAngle finalAngle = EulerAngle.ZERO;
-        for (var animation : runningAnimations.values()) {
+        for (var animation : getRunningAnimations().values()) {
             var angle = animation.getRotation(modelBone.getTemplateBone().getName());
             if (angle == null) {
                 continue;
@@ -45,25 +43,29 @@ public class AnimationHandler {
         return finalAngle;
     }
 
+    @Override
     public void playAnimation(String name, double speed) {
-        TemplateAnimation templateAnimation = spawnedModel.getModelTemplate().getAnimation(name);
+        TemplateAnimation templateAnimation = getSpawnedModel().getModelTemplate().getAnimation(name);
         if (templateAnimation == null) {
             return;
         }
         var runningAnimation = new RunningAnimation(templateAnimation,speed);
-        runningAnimations.put(name,runningAnimation);
+        getRunningAnimations().put(name,runningAnimation);
     }
 
+    @Override
     public boolean isPlaying(String name) {
-        var running = runningAnimations.get(name);
+        var running = getRunningAnimations().get(name);
         return running != null;
     }
 
+    @Override
     public void stopAnimation(String name) {
-        runningAnimations.remove(name);
+        getRunningAnimations().remove(name);
     }
 
+    @Override
     public void stopAnimations() {
-        runningAnimations.clear();
+        getRunningAnimations().clear();
     }
 }

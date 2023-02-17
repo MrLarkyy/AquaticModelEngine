@@ -1,10 +1,10 @@
-package xyz.larkyy.aquaticmodelengine.animation;
+package xyz.larkyy.aquaticmodelengine.api.model.animation;
 
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-import xyz.larkyy.aquaticmodelengine.animation.keyframe.PositionKeyFrame;
-import xyz.larkyy.aquaticmodelengine.animation.keyframe.RotationKeyFrame;
-import xyz.larkyy.aquaticmodelengine.util.math.TimelineUtil;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.keyframe.PositionKeyFrame;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.keyframe.RotationKeyFrame;
+import xyz.larkyy.aquaticmodelengine.api.utils.TimelineUtil;
 
 import java.util.TreeMap;
 

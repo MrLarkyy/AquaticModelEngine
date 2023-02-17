@@ -5,13 +5,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
-import xyz.larkyy.aquaticmodelengine.animation.InterpolationType;
-import xyz.larkyy.aquaticmodelengine.animation.LoopMode;
-import xyz.larkyy.aquaticmodelengine.animation.TemplateAnimation;
-import xyz.larkyy.aquaticmodelengine.animation.Timeline;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.InterpolationType;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.LoopMode;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.TemplateAnimation;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.Timeline;
+import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;
+import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
+import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBoneImpl;
 import xyz.larkyy.aquaticmodelengine.generator.java.*;
-import xyz.larkyy.aquaticmodelengine.model.template.ModelTemplate;
-import xyz.larkyy.aquaticmodelengine.model.template.TemplateBone;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -26,9 +27,9 @@ public class BlockBenchParser {
     private final Map<String, JavaItem> cachedJavaItems = new HashMap<>();
     private final Map<Integer,BBTexture> textures = new HashMap<>();
     private JavaBaseItem baseItem = null;
-    private ModelTemplate modelTemplate = null;
+    private ModelTemplateImpl modelTemplate = null;
 
-    public ModelTemplate generate(File file, JavaBaseItem baseItem) {
+    public ModelTemplateImpl generate(File file, JavaBaseItem baseItem) {
         cachedElements.clear();
         cachedJavaItems.clear();
         textures.clear();
@@ -49,7 +50,7 @@ public class BlockBenchParser {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        ModelTemplate modelTemplate = new ModelTemplate(name);
+        ModelTemplateImpl modelTemplate = new ModelTemplateImpl(name);
         this.modelTemplate = modelTemplate;
 
         loadElements(object.getAsJsonArray("elements"));
@@ -109,7 +110,7 @@ public class BlockBenchParser {
         return element;
     }
 
-    private List<BBBone> loadBones(JsonArray array, ModelTemplate template) {
+    private List<BBBone> loadBones(JsonArray array, ModelTemplateImpl template) {
         List<BBBone> bones = new ArrayList<>();
         for (var item : array) {
             bones.add(loadBone(item.getAsJsonObject(),template.getBones(),null));
@@ -117,7 +118,7 @@ public class BlockBenchParser {
         return bones;
     }
 
-    private BBBone loadBone(JsonObject object, List<TemplateBone> bones, TemplateBone parentBone) {
+    private BBBone loadBone(JsonObject object, List<TemplateBone> bones, TemplateBoneImpl parentBone) {
         Gson gson = new Gson();
         var bone = gson.fromJson(object, BBBone.class);
         EulerAngle rotation;
@@ -131,7 +132,7 @@ public class BlockBenchParser {
             );
         }
 
-        var templateBone = new TemplateBone(
+        var templateBone = new TemplateBoneImpl(
                 bone.getName(),
                 new Vector(-bone.getOrigin()[0],bone.getOrigin()[1],-bone.getOrigin()[2]),
                 rotation

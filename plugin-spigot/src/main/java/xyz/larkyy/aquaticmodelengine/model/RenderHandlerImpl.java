@@ -5,30 +5,21 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModel;
+import xyz.larkyy.aquaticmodelengine.api.model.RenderHandler;
+import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModelImpl;
 
 import java.util.*;
-import java.util.function.Function;
 
-public class RenderHandler {
+public class RenderHandlerImpl extends RenderHandler {
 
-    private final List<UUID> seenBy = new ArrayList<>();
-    private final List<UUID> blacklist = new ArrayList<>();
-    private Function<Player,Boolean> filter;
-
-    private boolean hidden = false;
-
-    private final double viewDistance;
-    private final SpawnedModel spawnedModel;
-
-    public RenderHandler(SpawnedModel spawnedModel, int viewDistance) {
-        this.viewDistance = viewDistance;
-        this.spawnedModel = spawnedModel;
-        this.filter = (p) -> true;
+    public RenderHandlerImpl(SpawnedModelImpl spawnedModel, int viewDistance) {
+        super(spawnedModel,viewDistance);
+        setFilter((p) -> true);
     }
 
+    @Override
     public boolean checkCanBeSeen(Player player) {
-        Entity e = spawnedModel.getBoundEntity();
+        Entity e = getSpawnedModel().getModelHolder().getBoundEntity();
 
         if (!player.getWorld().equals(e.getWorld())) {
             return false;
@@ -38,14 +29,15 @@ public class RenderHandler {
 
         var vec = eVec.subtract(pVec);
 
-        var minVec = new Vector(-viewDistance,-viewDistance,-viewDistance);
-        var maxVec = new Vector(viewDistance,viewDistance,viewDistance);
+        var minVec = new Vector(-getRenderDistance(),-getRenderDistance(),-getRenderDistance());
+        var maxVec = new Vector(getRenderDistance(),getRenderDistance(),getRenderDistance());
 
         return (vec.isInAABB(minVec,maxVec));
     }
 
+    @Override
     public void checkViewers() {
-        if (hidden) {
+        if (isHidden()) {
             return;
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -57,13 +49,15 @@ public class RenderHandler {
         }
     }
 
+    @Override
     public void show() {
-        hidden = false;
+        setHidden(false);
         checkViewers();
     }
 
+    @Override
     public void hide() {
-        for (UUID uuid : new ArrayList<>(seenBy)) {
+        for (UUID uuid : new ArrayList<>(getSeenBy())) {
             var offlinePlayer = Bukkit.getOfflinePlayer(uuid);
             if (!offlinePlayer.isOnline()) {
                 removeViewerFromCache(offlinePlayer);
@@ -76,57 +70,55 @@ public class RenderHandler {
             }
             hide(player);
         }
-        hidden = true;
+        setHidden(true);
     }
 
+    @Override
     public void show(Player player) {
-        if (seenBy.contains(player.getUniqueId())) {
+        if (getSeenBy().contains(player.getUniqueId())) {
             return;
         }
-        if (hidden) {
-            return;
-        }
-
-        if (!filter.apply(player)) {
+        if (isHidden()) {
             return;
         }
 
-        seenBy.add(player.getUniqueId());
+        if (!getFilter().apply(player)) {
+            return;
+        }
 
-        spawnedModel.getBones().values().forEach(bone -> {
+        getSeenBy().add(player.getUniqueId());
+
+        getSpawnedModel().getBones().values().forEach(bone -> {
             bone.show(player);
         });
     }
 
+    @Override
     public void hide(Player player) {
-        if (!seenBy.contains(player.getUniqueId())) {
+        if (!getSeenBy().contains(player.getUniqueId())) {
             return;
         }
-        seenBy.remove(player.getUniqueId());
+        getSeenBy().remove(player.getUniqueId());
 
-        spawnedModel.getBones().values().forEach(bone -> {
+        getSpawnedModel().getBones().values().forEach(bone -> {
             bone.hide(player);
         });
     }
 
+    @Override
     public void removeViewerFromCache(OfflinePlayer player) {
-        seenBy.remove(player.getUniqueId());
+        getSeenBy().remove(player.getUniqueId());
     }
 
+    @Override
     public void blacklistPlayer(Player player) {
-        blacklist.add(player.getUniqueId());
+        getBlacklist().add(player.getUniqueId());
         hide(player);
     }
+
+    @Override
     public void unblacklistPlayer(Player player) {
-        blacklist.remove(player.getUniqueId());
+        getBlacklist().remove(player.getUniqueId());
         show(player);
-    }
-
-    public void setFilter(Function<Player, Boolean> filter) {
-        this.filter = filter;
-    }
-
-    public List<UUID> getSeenBy() {
-        return Collections.unmodifiableList(seenBy);
     }
 }

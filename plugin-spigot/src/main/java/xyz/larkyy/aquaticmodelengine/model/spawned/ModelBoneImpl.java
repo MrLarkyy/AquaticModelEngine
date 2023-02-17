@@ -10,86 +10,60 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
-import xyz.larkyy.aquaticmodelengine.model.template.TemplateBone;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
+import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
 import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ModelBone {
-    private final TemplateBone templateBone;
-    private BoneEntity boneEntity = null;
-    private final List<ModelBone> children = new ArrayList<>();
-    private ModelBone parent = null;
-    private final SpawnedModel spawnedModel;
-    public ModelBone(TemplateBone templateBone, SpawnedModel spawnedModel) {
-        this.templateBone = templateBone;
-        this.spawnedModel = spawnedModel;
+public class ModelBoneImpl extends ModelBone {
+    public ModelBoneImpl(TemplateBone templateBone, SpawnedModel spawnedModel) {
+        super(templateBone,spawnedModel);
     }
 
-    public List<ModelBone> getChildren() {
-        return children;
-    }
-
-    public ModelBone getParent() {
-        return parent;
-    }
-
-    public void setParent(ModelBone parent) {
-        this.parent = parent;
-    }
-
-    /*
-    RECODED VERSION
-    */
-    public void tick2(Vector parentPivot, EulerAngle parentAngle) {
-        if (boneEntity == null) {
+    @Override
+    public void tick(Vector parentPivot, EulerAngle parentAngle) {
+        if (getBoneEntity() == null) {
             return;
         }
-        if (spawnedModel.getBoundEntity() == null) {
+        if (getSpawnedModel().getModelHolder().getBoundEntity() == null) {
             return;
         }
-        var loc = spawnedModel.getBoundEntity().getLocation().clone().add(1.5,0,0);
+        var loc = getSpawnedModel().getModelHolder().getBoundEntity().getLocation().clone().add(1.5,0,0);
 
-        var finalPivot = getFinalPivot2(parentPivot,parentAngle).clone();
-        var finalRotation = getFinalRotation2(parentAngle);
+        var finalPivot = getFinalPivot(parentPivot,parentAngle).clone();
+        var finalRotation = getFinalRotation(parentAngle);
 
-        for (var bone : children) {
-            bone.tick2(finalPivot.clone(),finalRotation);
+        for (var bone : getChildren()) {
+            bone.tick(finalPivot.clone(),finalRotation);
         }
 
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
         finalPivot.multiply(0.0625d);
         var finalLocation = loc.clone().add(finalPivot);
 
-        boneEntity.setHeadPose(finalRotation);
-        boneEntity.teleport(
+        getBoneEntity().setHeadPose(finalRotation);
+        getBoneEntity().teleport(
                 finalLocation
         );
-
-        //boneEntity.setRotation(loc.getYaw(),0);
     }
 
-    public TemplateBone getTemplateBone() {
-        return templateBone;
-    }
-
-    public void spawnModel2(Vector parentPivot, EulerAngle parentAngle) {
-        if (spawnedModel.getBoundEntity() == null) {
+    @Override
+    public void spawnModel(Vector parentPivot, EulerAngle parentAngle) {
+        if (getSpawnedModel().getModelHolder().getBoundEntity() == null) {
             return;
         }
-        var loc = spawnedModel.getBoundEntity().getLocation().clone();
+        var loc = getSpawnedModel().getModelHolder().getBoundEntity().getLocation().clone();
 
         var yaw = loc.getYaw();
 
-        var finalPivot = getFinalPivot2(parentPivot,parentAngle).clone();
-        var finalRotation = getFinalRotation2(parentAngle);
+        var finalPivot = getFinalPivot(parentPivot,parentAngle).clone();
+        var finalRotation = getFinalRotation(parentAngle);
 
-        for (var bone : children) {
-            bone.spawnModel2(finalPivot.clone(),finalRotation);
+        for (var bone : getChildren()) {
+            bone.spawnModel(finalPivot.clone(),finalRotation);
         }
 
-        if (boneEntity != null) {
+        if (getBoneEntity() != null) {
             removeModel();
         }
 
@@ -98,7 +72,7 @@ public class ModelBone {
 
         loc.add(finalPivot);
 
-        boneEntity = new BoneEntity(this,AquaticModelEngine.getInstance().getEntityHandler().spawn(loc, armorStand -> {
+        setBoneEntity(new BoneEntityImpl(this,AquaticModelEngine.getInstance().getEntityHandler().spawn(loc, armorStand -> {
             armorStand.setGravity(false);
             armorStand.setMarker(true);
             armorStand.setPersistent(false);
@@ -108,32 +82,37 @@ public class ModelBone {
             var im = is.getItemMeta();
             LeatherArmorMeta lam = (LeatherArmorMeta) im;
             lam.setColor(Color.fromRGB(255,255,255));
-            lam.setCustomModelData(templateBone.getModelId());
+            lam.setCustomModelData(getTemplateBone().getModelId());
             is.setItemMeta(lam);
             armorStand.getEquipment().setHelmet(is);
             armorStand.setHeadPose(finalRotation);
-        }));
+        }))
+        );
 
         Bukkit.getOnlinePlayers().forEach(p -> {
-            boneEntity.show(p);
+            getBoneEntity().show(p);
         });
     }
 
+    @Override
     public void removeModel() {
-        Bukkit.getOnlinePlayers().forEach(p -> boneEntity.hide(p));
-        boneEntity.remove();
+        Bukkit.getOnlinePlayers().forEach(p -> getBoneEntity().hide(p));
+        getBoneEntity().remove();
     }
 
+    @Override
     public void teleport(Location location) {
-        if (boneEntity != null) {
-            boneEntity.teleport(location);
+        if (getBoneEntity() != null) {
+            getBoneEntity().teleport(location);
         }
     }
 
-    private EulerAngle getFinalRotation() {
-        EulerAngle rotation = templateBone.getRotation();
+    /*
+    @Override
+    public EulerAngle getFinalRotation() {
+        EulerAngle rotation = getTemplateBone().getRotation();
 
-        var animationRotation = spawnedModel.getAnimationHandler().getRotation(this);
+        var animationRotation = getSpawnedModel().getAnimationHandler().getRotation(this);
         rotation = rotation.add(-animationRotation.getX(),animationRotation.getY(),animationRotation.getZ());
 
         if (getParent() != null) {
@@ -156,14 +135,13 @@ public class ModelBone {
         return rotation;
     }
 
-    /*
-        RECODED VERSION
      */
 
-    private EulerAngle getFinalRotation2(EulerAngle parentAngle) {
-        EulerAngle rotation = templateBone.getRotation();
+    @Override
+    public EulerAngle getFinalRotation(EulerAngle parentAngle) {
+        EulerAngle rotation = getTemplateBone().getRotation();
 
-        var animationRotation = spawnedModel.getAnimationHandler().getRotation(this);
+        var animationRotation = getSpawnedModel().getAnimationHandler().getRotation(this);
         rotation = rotation.add(animationRotation.getX(),animationRotation.getY(),animationRotation.getZ());
 
         if (getParent() != null) {
@@ -186,9 +164,10 @@ public class ModelBone {
         return rotation;
     }
 
+    /*
     private Vector getFinalPivot() {
-        Vector pivot = templateBone.getOrigin().clone();
-        Vector animationPivot = spawnedModel.getAnimationHandler().getPosition(this);
+        Vector pivot = getTemplateBone().getOrigin().clone();
+        Vector animationPivot = getSpawnedModel().getAnimationHandler().getPosition(this);
 
         pivot.add(animationPivot);
 
@@ -204,12 +183,15 @@ public class ModelBone {
         return pivot;
     }
 
+     */
+
     /*
         RECODED VERSION
      */
-    private Vector getFinalPivot2(Vector parentPivot, EulerAngle parentRotation) {
-        Vector pivot = templateBone.getOrigin().clone();
-        Vector animationPivot = spawnedModel.getAnimationHandler().getPosition(this);
+    @Override
+    public Vector getFinalPivot(Vector parentPivot, EulerAngle parentRotation) {
+        Vector pivot = getTemplateBone().getOrigin().clone();
+        Vector animationPivot = getSpawnedModel().getAnimationHandler().getPosition(this);
 
         pivot.add(animationPivot);
 
@@ -224,19 +206,13 @@ public class ModelBone {
         return pivot;
     }
 
+    @Override
     public void show(Player player) {
-        boneEntity.show(player);
+        getBoneEntity().show(player);
     }
 
+    @Override
     public void hide(Player player) {
-        boneEntity.hide(player);
-    }
-
-    public SpawnedModel getSpawnedModel() {
-        return spawnedModel;
-    }
-
-    public BoneEntity getBoneEntity() {
-        return boneEntity;
+        getBoneEntity().hide(player);
     }
 }

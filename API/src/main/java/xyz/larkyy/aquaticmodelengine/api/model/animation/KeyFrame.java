@@ -1,4 +1,4 @@
-package xyz.larkyy.aquaticmodelengine.animation;
+package xyz.larkyy.aquaticmodelengine.api.model.animation;
 
 public abstract class KeyFrame {
 

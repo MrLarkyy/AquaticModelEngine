@@ -1,8 +1,8 @@
-package xyz.larkyy.aquaticmodelengine.animation.keyframe;
+package xyz.larkyy.aquaticmodelengine.api.model.animation.keyframe;
 
 import org.bukkit.util.EulerAngle;
-import xyz.larkyy.aquaticmodelengine.animation.InterpolationType;
-import xyz.larkyy.aquaticmodelengine.animation.KeyFrame;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.InterpolationType;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.KeyFrame;
 
 public class RotationKeyFrame extends KeyFrame {
 

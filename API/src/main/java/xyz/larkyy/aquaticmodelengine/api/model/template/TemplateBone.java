@@ -1,4 +1,4 @@
-package xyz.larkyy.aquaticmodelengine.model.template;
+package xyz.larkyy.aquaticmodelengine.api.model.template;
 
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -6,7 +6,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TemplateBone {
+public abstract class TemplateBone {
 
     private int modelId;
     private final String name;

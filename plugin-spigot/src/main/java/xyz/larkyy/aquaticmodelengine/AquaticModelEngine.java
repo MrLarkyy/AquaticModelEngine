@@ -24,9 +24,6 @@ public final class AquaticModelEngine extends JavaPlugin {
         file.mkdirs();
 
         entityHandler = new EntityHandlerImpl();
-
-        //ModelSerializer serializer = new ModelSerializer(this);
-        //serializer.loadModels();
         modelGenerator = new ModelGenerator();
         modelGenerator.generateModels();
 

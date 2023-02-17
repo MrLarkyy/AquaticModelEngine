@@ -1,4 +1,4 @@
-package xyz.larkyy.aquaticmodelengine.util.math;
+package xyz.larkyy.aquaticmodelengine.api.utils;
 
 import org.bukkit.util.Vector;
 
