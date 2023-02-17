@@ -1,7 +1,7 @@
 package xyz.larkyy.aquaticmodelengine.api.model.spawned;
 
 import org.bukkit.entity.Player;
-import xyz.larkyy.aquaticmodelengine.api.model.ModelHolder;
+import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.RenderHandler;
 import xyz.larkyy.aquaticmodelengine.api.model.animation.AnimationHandler;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplate;

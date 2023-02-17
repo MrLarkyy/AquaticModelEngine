@@ -1,8 +1,11 @@
 package xyz.larkyy.aquaticmodelengine.model;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
-import xyz.larkyy.aquaticmodelengine.api.model.ModelHolder;
+import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
+import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.DummyModelHolder;
+import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.EntityModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;
 import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModelImpl;
@@ -39,13 +42,13 @@ public class ModelHandler {
     // Removes all holder models and removes the holder entity
     public void deleteHolder(ModelHolder modelHolder) {
         removeHolder(modelHolder);
-        modelHolder.getBoundEntity().remove();
+        modelHolder.remove();
     }
 
     // Removes all holder models and keeps the holder entity alive
     public void removeHolder(ModelHolder modelHolder) {
         modelHolder.getSpawnedModels().values().forEach(SpawnedModel::removeModel);
-        modelHolders.remove(modelHolder.getBoundEntity().getUniqueId());
+        modelHolders.remove(modelHolder.getUniqueId());
     }
 
     public ModelHolder getModelHolder(Entity entity) {
@@ -54,9 +57,22 @@ public class ModelHandler {
         }
         var holder = modelHolders.get(entity.getUniqueId());
         if (holder == null) {
-            holder = new ModelHolder(entity);
+            holder = new EntityModelHolder(entity);
             modelHolders.put(entity.getUniqueId(),holder);
         }
+        return holder;
+    }
+
+    public ModelHolder getModelHolder(UUID uuid) {
+        if (uuid == null) {
+            return null;
+        }
+        return modelHolders.get(uuid);
+    }
+
+    public ModelHolder createDummyModelHolder(Location location) {
+        var holder = new DummyModelHolder(location);
+        modelHolders.put(holder.getUniqueId(),holder);
         return holder;
     }
 

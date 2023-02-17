@@ -1,24 +1,19 @@
-package xyz.larkyy.aquaticmodelengine.api.model;
+package xyz.larkyy.aquaticmodelengine.api.model.holder;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
-import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
-public class ModelHolder {
+public abstract class ModelHolder {
 
     private final Map<String, SpawnedModel> spawnedModels;
-    private final Entity boundEntity;
 
-    public ModelHolder(Entity entity) {
+    public ModelHolder() {
         this.spawnedModels = new HashMap<>();
-        this.boundEntity = entity;
-    }
-
-    public Entity getBoundEntity() {
-        return boundEntity;
     }
 
     public Map<String, SpawnedModel> getSpawnedModels() {
@@ -36,5 +31,11 @@ public class ModelHolder {
         spawnedModels.put(spawnedModel.getModelTemplate().getName(),spawnedModel);
     }
 
+    public abstract void teleport(Location location);
+    public abstract Location getLocation();
+
+    public abstract UUID getUniqueId();
+
+    public abstract void remove();
 
 }

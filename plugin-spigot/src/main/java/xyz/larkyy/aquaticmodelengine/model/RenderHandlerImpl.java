@@ -1,6 +1,7 @@
 package xyz.larkyy.aquaticmodelengine.model;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -19,12 +20,12 @@ public class RenderHandlerImpl extends RenderHandler {
 
     @Override
     public boolean checkCanBeSeen(Player player) {
-        Entity e = getSpawnedModel().getModelHolder().getBoundEntity();
+        Location loc = getSpawnedModel().getModelHolder().getLocation();
 
-        if (!player.getWorld().equals(e.getWorld())) {
+        if (!player.getWorld().equals(loc.getWorld())) {
             return false;
         }
-        var eVec = e.getLocation().toVector();
+        var eVec = loc.toVector();
         var pVec = player.getLocation().toVector();
 
         var vec = eVec.subtract(pVec);

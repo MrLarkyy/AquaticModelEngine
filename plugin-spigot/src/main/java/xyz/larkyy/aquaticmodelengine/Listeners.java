@@ -8,6 +8,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModelImpl;
 
+import java.util.ArrayList;
+
 public class Listeners implements Listener {
 
     private SpawnedModelImpl spawnedModel = null;
@@ -26,6 +28,7 @@ public class Listeners implements Listener {
                         Bukkit.broadcastMessage("Applying model");
                         spawnedModel.playAnimation("idle",1);
                     } else if (e.getMessage().toLowerCase().contains("otter")) {
+                        holder = AquaticModelEngine.getInstance().getModelHandler().createDummyModelHolder(e.getPlayer().getLocation());
                         spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnModel(holder,"big_otter");
                         spawnedModel.applyModel();
                         Bukkit.broadcastMessage("Applying model");
@@ -40,8 +43,9 @@ public class Listeners implements Listener {
 
                 } else if (e.getMessage().toLowerCase().contains("remove models")) {
                     if (spawnedModel != null) {
-                        AquaticModelEngine.getInstance().getModelHandler().getModelHolders().values().forEach(holder ->
-                                AquaticModelEngine.getInstance().getModelHandler().deleteHolder(holder));
+                        for (var holder :new ArrayList<>(AquaticModelEngine.getInstance().getModelHandler().getModelHolders().values())) {
+                            AquaticModelEngine.getInstance().getModelHandler().deleteHolder(holder);
+                        }
                         Bukkit.broadcastMessage("Removing models");
                     }
                 }

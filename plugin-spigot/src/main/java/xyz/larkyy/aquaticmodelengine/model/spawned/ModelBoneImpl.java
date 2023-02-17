@@ -25,10 +25,10 @@ public class ModelBoneImpl extends ModelBone {
         if (getBoneEntity() == null) {
             return;
         }
-        if (getSpawnedModel().getModelHolder().getBoundEntity() == null) {
+        if (getSpawnedModel().getModelHolder() == null) {
             return;
         }
-        var loc = getSpawnedModel().getModelHolder().getBoundEntity().getLocation().clone().add(1.5,0,0);
+        var loc = getSpawnedModel().getModelHolder().getLocation().clone().add(1.5,0,0);
 
         var finalPivot = getFinalPivot(parentPivot,parentAngle).clone();
         var finalRotation = getFinalRotation(parentAngle);
@@ -49,10 +49,10 @@ public class ModelBoneImpl extends ModelBone {
 
     @Override
     public void spawnModel(Vector parentPivot, EulerAngle parentAngle) {
-        if (getSpawnedModel().getModelHolder().getBoundEntity() == null) {
+        if (getSpawnedModel().getModelHolder() == null) {
             return;
         }
-        var loc = getSpawnedModel().getModelHolder().getBoundEntity().getLocation().clone();
+        var loc = getSpawnedModel().getModelHolder().getLocation().clone();
 
         var yaw = loc.getYaw();
 
