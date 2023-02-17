@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>AquaticModelEngine</artifactId>
-        <groupId>xyz.larkyy</groupId>
+        <groupId>xyz.larkyy.aquaticmodelengine</groupId>
         <version>0.0.1</version>
     </parent>
 
