@@ -1,6 +1,7 @@
 package xyz.larkyy.aquaticmodelengine;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Pig;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.larkyy.aquaticmodelengine.api.IEntityHandler;

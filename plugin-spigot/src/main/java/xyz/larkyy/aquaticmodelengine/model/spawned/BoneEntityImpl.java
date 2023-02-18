@@ -27,9 +27,12 @@ public class BoneEntityImpl extends BoneEntity {
 
     @Override
     public void teleport(Location location) {
+        /*
         if (location.equals(getPrevLocation())) {
             return;
         }
+
+         */
         setPrevLocation(location);
         getFakeArmorStand().teleport(location);
         getRenderHandler().getSeenBy().forEach(uuid -> {

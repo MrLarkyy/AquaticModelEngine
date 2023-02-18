@@ -3,7 +3,6 @@ package xyz.larkyy.aquaticmodelengine.model;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.api.model.RenderHandler;

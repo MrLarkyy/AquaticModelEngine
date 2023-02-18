@@ -88,10 +88,6 @@ public class ModelBoneImpl extends ModelBone {
             armorStand.setHeadPose(finalRotation);
         }))
         );
-
-        Bukkit.getOnlinePlayers().forEach(p -> {
-            getBoneEntity().show(p);
-        });
     }
 
     @Override

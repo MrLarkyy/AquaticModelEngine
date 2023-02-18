@@ -24,12 +24,14 @@ public class ModelHandler {
     public SpawnedModelImpl spawnModel(ModelHolder modelHolder, ModelTemplateImpl template) {
         var spawned = new SpawnedModelImpl(modelHolder,template);
         modelHolder.addModel(spawned);
+        spawned.applyModel();
         return spawned;
     }
 
     public SpawnedModelImpl spawnModel(ModelHolder modelHolder, String model) {
         var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getTemplate(model);
         var spawned = spawnModel(modelHolder,m);
+        spawned.applyModel();
         modelHolder.addModel(spawned);
         return spawned;
     }
