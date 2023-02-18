@@ -23,7 +23,14 @@ public final class AquaticModelEngine extends JavaPlugin {
         getDataFolder().mkdirs();
         File file = new File(getDataFolder()+"/models");
         file.mkdirs();
-        entityHandler = new EntityHandlerImpl();
+        switch (getServer().getBukkitVersion()) {
+            case "1.19.2-R0.1-SNAPSHOT" -> {
+                entityHandler = new xyz.larkyy.aquaticmodelengine.nms.nms1_19_2.EntityHandlerImpl();
+            }
+            case "1.19.3-R0.1-SNAPSHOT" -> {
+                entityHandler = new EntityHandlerImpl();
+            }
+        }
         modelGenerator = new ModelGenerator();
 
         new BukkitRunnable() {
