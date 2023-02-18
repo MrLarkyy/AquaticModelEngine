@@ -1,4 +1,4 @@
-package xyz.larkyy.aquaticmodelengine.nms;
+package xyz.larkyy.aquaticmodelengine.nms.nms1_19_3;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -13,9 +13,9 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R1.util.CraftVector;
+import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R2.util.CraftVector;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
@@ -34,7 +34,6 @@ public class FakeArmorStandImpl implements FakeArmorStand {
         ServerLevel worldServer = cw.getHandle();
         this.armorStand = EntityType.ARMOR_STAND.create(
                 worldServer,
-                null,
                 null,
                 null,
                 new BlockPos(CraftVector.toNMS(location.toVector())),
@@ -130,7 +129,7 @@ public class FakeArmorStandImpl implements FakeArmorStand {
 
     private List<Packet<?>> updateMetaPackets() {
         List<Packet<?>> packets = new ArrayList<>();
-        var packet = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData(), true);
+        var packet = new ClientboundSetEntityDataPacket(armorStand.getId(), armorStand.getEntityData().getNonDefaultValues());
         packets.add(packet);
         return packets;
     }

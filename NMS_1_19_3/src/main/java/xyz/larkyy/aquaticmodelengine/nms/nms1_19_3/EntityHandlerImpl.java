@@ -1,18 +1,15 @@
-package xyz.larkyy.aquaticmodelengine.nms;
+package xyz.larkyy.aquaticmodelengine.nms.nms1_19_3;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_19_R1.util.CraftVector;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import xyz.larkyy.aquaticmodelengine.api.FakeArmorStand;
@@ -35,13 +32,13 @@ public class EntityHandlerImpl implements IEntityHandler {
     }
 
     public void updateEntity(int id, Consumer<org.bukkit.entity.Entity> factory) {
-        net.minecraft.world.entity.Entity entity = entities.get(id);
+        Entity entity = entities.get(id);
 
         if (factory != null) {
             factory.accept(entity.getBukkitEntity());
         }
 
-        final var packetMetadata = new ClientboundSetEntityDataPacket(entity.getId(), entity.getEntityData(), true);
+        final var packetMetadata = new ClientboundSetEntityDataPacket(entity.getId(), entity.getEntityData().getNonDefaultValues());
         sendPacket(new ArrayList<>(Bukkit.getOnlinePlayers()),packetMetadata);
 
         if (entity instanceof LivingEntity livingEntity) {
