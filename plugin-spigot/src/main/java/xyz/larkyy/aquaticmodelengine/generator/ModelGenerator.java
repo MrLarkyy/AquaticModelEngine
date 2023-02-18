@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
 import xyz.larkyy.aquaticmodelengine.api.event.ModelLoadEvent;
+import xyz.larkyy.aquaticmodelengine.api.event.State;
 import xyz.larkyy.aquaticmodelengine.model.template.TemplateRegistry;
 import xyz.larkyy.aquaticmodelengine.generator.java.JavaBaseItem;
 import xyz.larkyy.aquaticmodelengine.generator.blockbench.BlockBenchParser;
@@ -32,11 +33,11 @@ public class ModelGenerator {
             var modelTemplate = parser.generate(file,baseItem);
             registry.addTemplate(modelTemplate);
 
-            var event = new ModelLoadEvent(ModelLoadEvent.State.LOADING);
+            var event = new ModelLoadEvent(State.LOADING);
             Bukkit.getPluginManager().callEvent(event);
         }
 
-        var event = new ModelLoadEvent(ModelLoadEvent.State.FINISHED);
+        var event = new ModelLoadEvent(State.FINISHED);
         Bukkit.getPluginManager().callEvent(event);
 
         var baseItemFolder = new File(mainFolder,"assets/minecraft/models/item");

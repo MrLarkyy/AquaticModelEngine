@@ -1,7 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.generator.blockbench;
 
 import com.google.gson.*;
-import org.bukkit.Bukkit;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
@@ -58,8 +57,6 @@ public class BlockBenchParser {
         loadBones(object.getAsJsonArray("outliner"),modelTemplate);
         loadAnimations(object.getAsJsonArray("animations"));
 
-        Bukkit.broadcastMessage("Loaded items: "+cachedJavaItems.size());
-
         File mainFolder = AquaticModelEngine.getPlugin(AquaticModelEngine.class).getDataFolder();
         mainFolder.mkdirs();
         var modelFolder = new File(mainFolder+"/assets/aquaticengine/models/"+name);
@@ -93,10 +90,7 @@ public class BlockBenchParser {
         List<BBElement> list = new ArrayList<>();
         for (var item : array) {
             var element = loadElement(item.getAsJsonObject());
-            if (element == null) {
-                Bukkit.broadcastMessage("Element is null!");
-            } else {
-                Bukkit.broadcastMessage("Loaded an element!");
+            if (element != null) {
                 list.add(element);
             }
         }
@@ -196,7 +190,6 @@ public class BlockBenchParser {
                 }
             }
         }
-        Bukkit.broadcastMessage("Loaded bone");
         return bone;
     }
 
@@ -206,7 +199,6 @@ public class BlockBenchParser {
         for (var item : array) {
             var texture = gson.fromJson(item,BBTexture.class);
             if (texture != null) {
-                Bukkit.broadcastMessage("Loaded texture");
                 textures.put(textures.size(), texture);
             }
         }
@@ -217,7 +209,6 @@ public class BlockBenchParser {
         for (var item : array) {
             var animation = loadAnimation(item.getAsJsonObject());
             modelTemplate.addAnimation(animation);
-            Bukkit.broadcastMessage("§eAnimation "+animation.getName()+" has been added!");
         }
     }
 

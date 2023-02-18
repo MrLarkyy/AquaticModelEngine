@@ -3,6 +3,7 @@ package xyz.larkyy.aquaticmodelengine.api.event;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class ModelLoadEvent extends Event {
 
@@ -17,16 +18,12 @@ public class ModelLoadEvent extends Event {
         return state;
     }
 
-    public enum State {
-        FINISHED, LOADING
-    }
-
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLERS;
     }
 }
