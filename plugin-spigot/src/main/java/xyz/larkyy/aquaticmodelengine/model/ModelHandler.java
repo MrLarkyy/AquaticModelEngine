@@ -3,6 +3,7 @@ package xyz.larkyy.aquaticmodelengine.model;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
+import xyz.larkyy.aquaticmodelengine.api.model.IModelHandler;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.DummyModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.EntityModelHolder;
@@ -12,7 +13,7 @@ import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModelImpl;
 
 import java.util.*;
 
-public class ModelHandler {
+public class ModelHandler implements IModelHandler {
 
     private final Map<UUID,ModelHolder> modelHolders = new HashMap<>();
     private final ModelTicker modelTicker = new ModelTicker(this);

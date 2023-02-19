@@ -1,4 +1,4 @@
-package xyz.larkyy.aquaticmodelengine.model.template;
+package xyz.larkyy.aquaticmodelengine.api.model.template;
 
 import org.bukkit.Bukkit;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;

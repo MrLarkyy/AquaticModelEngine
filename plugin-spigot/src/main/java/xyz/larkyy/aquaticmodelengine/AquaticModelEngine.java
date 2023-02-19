@@ -2,6 +2,7 @@ package xyz.larkyy.aquaticmodelengine;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.larkyy.aquaticmodelengine.api.AquaticModelEngineAPI;
 import xyz.larkyy.aquaticmodelengine.api.IEntityHandler;
 import xyz.larkyy.aquaticmodelengine.generator.ModelGenerator;
 import xyz.larkyy.aquaticmodelengine.model.ModelHandler;
@@ -17,6 +18,11 @@ public final class AquaticModelEngine extends JavaPlugin {
 
     private IEntityHandler entityHandler;
 
+    @Override
+    public void onLoad() {
+        modelHandler = new ModelHandler();
+        AquaticModelEngineAPI.api = new AquaticModelEngineAPI(modelHandler);
+    }
     @Override
     public void onEnable() {
         instance = this;
@@ -38,7 +44,6 @@ public final class AquaticModelEngine extends JavaPlugin {
             public void run() {
                 modelGenerator.generateModels();
 
-                modelHandler = new ModelHandler();
 
                 modelHandler.startTicking();
             }

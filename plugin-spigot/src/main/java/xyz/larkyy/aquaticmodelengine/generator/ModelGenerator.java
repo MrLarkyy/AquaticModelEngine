@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
 import xyz.larkyy.aquaticmodelengine.api.event.ModelLoadEvent;
 import xyz.larkyy.aquaticmodelengine.api.event.State;
-import xyz.larkyy.aquaticmodelengine.model.template.TemplateRegistry;
+import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateRegistry;
 import xyz.larkyy.aquaticmodelengine.generator.java.JavaBaseItem;
 import xyz.larkyy.aquaticmodelengine.generator.blockbench.BlockBenchParser;
 import xyz.larkyy.aquaticmodelengine.model.reader.ModelReader;
