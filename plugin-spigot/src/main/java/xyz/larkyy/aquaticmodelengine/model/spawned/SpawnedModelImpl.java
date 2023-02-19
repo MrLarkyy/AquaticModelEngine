@@ -53,6 +53,7 @@ public class SpawnedModelImpl extends SpawnedModel {
 
     @Override
     public void tick() {
+        getRenderHandler().checkViewers();
         getAnimationHandler().update();
         /*
         for (var bone : bones.values()) {
@@ -62,7 +63,6 @@ public class SpawnedModelImpl extends SpawnedModel {
         for (var bone : getParentBones().values()) {
             bone.tick(new Vector(), EulerAngle.ZERO);
         }
-        getRenderHandler().checkViewers();
     }
 
     @Override

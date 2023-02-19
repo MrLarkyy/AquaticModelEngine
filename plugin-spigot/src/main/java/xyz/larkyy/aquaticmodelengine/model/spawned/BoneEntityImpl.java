@@ -21,7 +21,10 @@ public class BoneEntityImpl extends BoneEntity {
         setPrevHeadPose(angle);
         getFakeArmorStand().setHeadPose(angle);
         getRenderHandler().getSeenBy().forEach(uuid -> {
-            getFakeArmorStand().updateHeadRotation(Bukkit.getPlayer(uuid));
+            var player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                getFakeArmorStand().updateHeadRotation(player);
+            }
         });
     }
 
@@ -36,7 +39,10 @@ public class BoneEntityImpl extends BoneEntity {
         setPrevLocation(location);
         getFakeArmorStand().teleport(location);
         getRenderHandler().getSeenBy().forEach(uuid -> {
-            getFakeArmorStand().updatePosition(Bukkit.getPlayer(uuid));
+            var player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                getFakeArmorStand().updatePosition(player);
+            }
         });
 
     }
