@@ -2,6 +2,7 @@ package xyz.larkyy.aquaticmodelengine.model;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
 import xyz.larkyy.aquaticmodelengine.api.model.IModelHandler;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
@@ -9,6 +10,7 @@ import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.DummyModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.EntityModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;
+import xyz.larkyy.aquaticmodelengine.model.player.PlayerModelImpl;
 import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModelImpl;
 
 import java.util.*;
@@ -83,6 +85,37 @@ public class ModelHandler implements IModelHandler {
         for (var holder : modelHolders.values()) {
             holder.tick();
         }
+    }
+
+    @Override
+    public SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote) {
+        var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getEmote(emote);
+        return spawnEmote(holder,player,m);
+    }
+
+    @Override
+    public SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template) {
+        if (template == null) {
+            return null;
+        }
+        var spawned = new PlayerModelImpl(template,holder,player);
+        holder.setEmote(spawned);
+        spawned.applyModel();
+        return spawned;
+    }
+
+    @Override
+    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote) {
+        var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getEmote(emote);
+        return spawnEmote(holder,url,slim,m);
+    }
+
+    @Override
+    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template) {
+        var spawned = new PlayerModelImpl(template,holder,url,slim);
+        holder.setEmote(spawned);
+        spawned.applyModel();
+        return spawned;
     }
 
     public void startTicking() {

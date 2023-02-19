@@ -1,8 +1,8 @@
 package xyz.larkyy.aquaticmodelengine.api.model.holder;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +11,7 @@ import java.util.UUID;
 public abstract class ModelHolder {
 
     private final Map<String, SpawnedModel> spawnedModels;
+    private PlayerModel emote = null;
 
     public ModelHolder() {
         this.spawnedModels = new HashMap<>();
@@ -20,8 +21,26 @@ public abstract class ModelHolder {
         return spawnedModels;
     }
 
+    public PlayerModel getEmote() {
+        return emote;
+    }
+
+    public void setEmote(PlayerModel emote) {
+        if (this.emote != null) {
+            emote.removeModel();
+        }
+        this.emote = emote;
+    }
+
     public void tick() {
         spawnedModels.values().forEach(SpawnedModel::tick);
+        if (emote != null) {
+            emote.tick();
+            if (emote.getAnimationHandler().getRunningAnimations().isEmpty()) {
+                emote.removeModel();
+                emote = null;
+            }
+        }
     }
 
     public void addModel(SpawnedModel spawnedModel) {

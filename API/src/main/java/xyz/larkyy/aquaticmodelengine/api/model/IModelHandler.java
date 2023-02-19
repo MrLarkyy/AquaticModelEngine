@@ -2,6 +2,7 @@ package xyz.larkyy.aquaticmodelengine.api.model;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;
@@ -19,4 +20,9 @@ public interface IModelHandler {
     ModelHolder getModelHolder(UUID uuid);
     ModelHolder createDummyModelHolder(Location location);
     void tickModels();
+
+    SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote);
+    SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template);
+    SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote);
+    SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template);
 }

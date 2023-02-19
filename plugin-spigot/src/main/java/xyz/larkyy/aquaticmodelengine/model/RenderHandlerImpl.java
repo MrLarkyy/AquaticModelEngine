@@ -6,13 +6,13 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.api.model.RenderHandler;
-import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModelImpl;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 
 import java.util.*;
 
 public class RenderHandlerImpl extends RenderHandler {
 
-    public RenderHandlerImpl(SpawnedModelImpl spawnedModel, int viewDistance) {
+    public RenderHandlerImpl(SpawnedModel spawnedModel, int viewDistance) {
         super(spawnedModel,viewDistance);
         setFilter((p) -> true);
     }

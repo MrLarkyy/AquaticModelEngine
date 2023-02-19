@@ -12,7 +12,9 @@ import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
+import xyz.larkyy.aquaticmodelengine.api.model.template.player.PlayerTemplateBone;
 import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
 
 public class ModelBoneImpl extends ModelBone {
@@ -78,12 +80,25 @@ public class ModelBoneImpl extends ModelBone {
             armorStand.setPersistent(false);
             armorStand.setInvisible(true);
             armorStand.setRotation(yaw,0);
-            var is = new ItemStack(Material.LEATHER_HORSE_ARMOR);
-            var im = is.getItemMeta();
-            LeatherArmorMeta lam = (LeatherArmorMeta) im;
-            lam.setColor(Color.fromRGB(255,255,255));
-            lam.setCustomModelData(getTemplateBone().getModelId());
-            is.setItemMeta(lam);
+
+            ItemStack is;
+            if (getSpawnedModel() instanceof PlayerModel playerModel
+                    && getTemplateBone() instanceof PlayerTemplateBone playerTemplateBone) {
+                is = new ItemStack(Material.PLAYER_HEAD);
+                is = AquaticModelEngine.getInstance().getNmsHandler().setSkullTexture(is,playerModel.getTexture());
+                var im = is.getItemMeta();
+                im.setCustomModelData(playerTemplateBone.getModelId(playerModel.getTexture().isSlim()));
+                is.setItemMeta(im);
+
+            } else {
+
+                is = new ItemStack(getTemplateBone().getMaterial());
+                var im = is.getItemMeta();
+                LeatherArmorMeta lam = (LeatherArmorMeta) im;
+                lam.setColor(Color.fromRGB(255,255,255));
+                lam.setCustomModelData(getTemplateBone().getModelId());
+                is.setItemMeta(lam);
+            }
             armorStand.getEquipment().setHelmet(is);
             armorStand.setHeadPose(finalRotation);
         }))
@@ -102,36 +117,6 @@ public class ModelBoneImpl extends ModelBone {
             getBoneEntity().teleport(location);
         }
     }
-
-    /*
-    @Override
-    public EulerAngle getFinalRotation() {
-        EulerAngle rotation = getTemplateBone().getRotation();
-
-        var animationRotation = getSpawnedModel().getAnimationHandler().getRotation(this);
-        rotation = rotation.add(-animationRotation.getX(),animationRotation.getY(),animationRotation.getZ());
-
-        if (getParent() != null) {
-            var parentRotation = getParent().getFinalRotation();
-            parentRotation = new EulerAngle(
-                    -parentRotation.getX(),
-                    parentRotation.getY(),
-                    parentRotation.getZ()
-            );
-
-            Quaternion startQuat = new Quaternion(parentRotation);
-            Quaternion rotationQuat = new Quaternion(rotation);
-
-            Quaternion resultQuat = rotationQuat.mul(startQuat);
-            var resultEuler = resultQuat.getEulerAnglesXYZ();
-            resultEuler = resultEuler.setX(-resultEuler.getX());
-            rotation = resultEuler;
-        }
-
-        return rotation;
-    }
-
-     */
 
     @Override
     public EulerAngle getFinalRotation(EulerAngle parentAngle) {
@@ -159,27 +144,6 @@ public class ModelBoneImpl extends ModelBone {
 
         return rotation;
     }
-
-    /*
-    private Vector getFinalPivot() {
-        Vector pivot = getTemplateBone().getOrigin().clone();
-        Vector animationPivot = getSpawnedModel().getAnimationHandler().getPosition(this);
-
-        pivot.add(animationPivot);
-
-        if (getParent() != null) {
-            pivot = getParent().getTemplateBone().getOrigin().clone().subtract(pivot);
-            var rotation = getParent().getFinalRotation();
-            pivot.rotateAroundX(rotation.getX());
-            pivot.rotateAroundY(-rotation.getY());
-            pivot.rotateAroundZ(-rotation.getZ());
-
-            pivot = parent.getFinalPivot().subtract(pivot);
-        }
-        return pivot;
-    }
-
-     */
 
     /*
         RECODED VERSION

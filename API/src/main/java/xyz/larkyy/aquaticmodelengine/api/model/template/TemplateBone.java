@@ -1,5 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.api.model.template;
 
+import org.bukkit.Material;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
@@ -9,6 +10,7 @@ import java.util.List;
 public abstract class TemplateBone {
 
     private int modelId;
+    private Material material = Material.LEATHER_HORSE_ARMOR;
     private final String name;
     private final List<TemplateBone> children = new ArrayList<>();
     private TemplateBone parent = null;
@@ -51,5 +53,13 @@ public abstract class TemplateBone {
 
     public String getName() {
         return name;
+    }
+
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 }

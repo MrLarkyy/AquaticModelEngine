@@ -27,11 +27,20 @@ public class ModelGenerator {
         mainFolder.mkdirs();
 
         var modelsFolder = new File(mainFolder,"models");
+        var emotesFolder = new File(mainFolder,"emotes");
         modelsFolder.mkdirs();
+        emotesFolder.mkdirs();
 
         for (var file : modelsFolder.listFiles()) {
             var modelTemplate = parser.generate(file,baseItem);
             registry.addTemplate(modelTemplate);
+
+            var event = new ModelLoadEvent(State.LOADING);
+            Bukkit.getPluginManager().callEvent(event);
+        }
+        for (var file : emotesFolder.listFiles()) {
+            var modelTemplate = parser.generateEmote(file,baseItem);
+            registry.addEmote(modelTemplate);
 
             var event = new ModelLoadEvent(State.LOADING);
             Bukkit.getPluginManager().callEvent(event);
