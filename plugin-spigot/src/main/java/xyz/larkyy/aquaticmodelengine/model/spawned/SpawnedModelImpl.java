@@ -11,6 +11,7 @@ import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
 import xyz.larkyy.aquaticmodelengine.model.RenderHandlerImpl;
+import xyz.larkyy.aquaticmodelengine.model.spawned.bones.BasicBone;
 
 
 public class SpawnedModelImpl extends SpawnedModel {
@@ -36,8 +37,8 @@ public class SpawnedModelImpl extends SpawnedModel {
     }
 
     @Override
-    public ModelBoneImpl addBone(TemplateBone templateBone) {
-        var bone = new ModelBoneImpl(templateBone,this);
+    public BasicBone addBone(TemplateBone templateBone) {
+        var bone = new BasicBone(templateBone,this);
         getBones().put(templateBone.getName(),bone);
         return bone;
     }

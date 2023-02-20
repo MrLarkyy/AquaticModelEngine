@@ -2,8 +2,7 @@ package xyz.larkyy.aquaticmodelengine.model.reader;
 
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
-import xyz.larkyy.aquaticmodelengine.model.spawned.ModelBoneImpl;
-import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModelImpl;
+import xyz.larkyy.aquaticmodelengine.api.model.template.player.LimbType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +19,7 @@ public class ModelReader {
         return loadedBones;
     }
 
-
-
+    public BoneReader getBoneReader() {
+        return boneReader;
+    }
 }

@@ -6,9 +6,11 @@ import org.bukkit.util.EulerAngle;
 import xyz.larkyy.aquaticmodelengine.api.FakeArmorStand;
 import xyz.larkyy.aquaticmodelengine.api.model.RenderHandler;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.BoneEntity;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
+
 public class BoneEntityImpl extends BoneEntity {
 
-    public BoneEntityImpl(ModelBoneImpl modelBone, FakeArmorStand fakeArmorStand) {
+    public BoneEntityImpl(ModelBone modelBone, FakeArmorStand fakeArmorStand) {
         super(modelBone,fakeArmorStand);
     }
 

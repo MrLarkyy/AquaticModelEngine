@@ -13,7 +13,7 @@ import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplate;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
 import xyz.larkyy.aquaticmodelengine.api.model.template.player.LimbType;
 import xyz.larkyy.aquaticmodelengine.model.RenderHandlerImpl;
-import xyz.larkyy.aquaticmodelengine.model.spawned.ModelBoneImpl;
+import xyz.larkyy.aquaticmodelengine.model.spawned.bones.BasicBone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +52,8 @@ public class PlayerModelImpl extends PlayerModel {
     }
 
     @Override
-    public ModelBoneImpl addBone(TemplateBone templateBone) {
-        var bone = new ModelBoneImpl(templateBone,this);
+    public BasicBone addBone(TemplateBone templateBone) {
+        var bone = new BasicBone(templateBone,this);
         getBones().put(templateBone.getName(),bone);
         return bone;
     }
@@ -69,7 +69,6 @@ public class PlayerModelImpl extends PlayerModel {
 
     @Override
     public void tick() {
-        getRenderHandler().checkViewers();
         getAnimationHandler().update();
         /*
         for (var bone : bones.values()) {
@@ -79,6 +78,7 @@ public class PlayerModelImpl extends PlayerModel {
         for (var bone : getParentBones().values()) {
             bone.tick(new Vector(), EulerAngle.ZERO);
         }
+        getRenderHandler().checkViewers();
     }
 
     @Override
@@ -89,8 +89,9 @@ public class PlayerModelImpl extends PlayerModel {
     @Override
     public void applyModel() {
         for (var model : getParentBones().values()) {
-            model.spawnModel(new Vector(0.313D, -1.8520400014901162D, 0.0D), EulerAngle.ZERO);
+            model.spawnModel(new Vector(), EulerAngle.ZERO);
         }
+        tick();
     }
 
     @Override

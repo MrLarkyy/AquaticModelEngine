@@ -1,27 +1,24 @@
-package xyz.larkyy.aquaticmodelengine.model.spawned;
+package xyz.larkyy.aquaticmodelengine.model.spawned.bones;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
-import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
 import xyz.larkyy.aquaticmodelengine.api.model.template.player.LimbType;
 import xyz.larkyy.aquaticmodelengine.api.model.template.player.PlayerTemplateBone;
+import xyz.larkyy.aquaticmodelengine.model.spawned.BoneEntityImpl;
 import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
 
-public class ModelBoneImpl extends ModelBone {
-    public ModelBoneImpl(TemplateBone templateBone, SpawnedModel spawnedModel) {
-        super(templateBone,spawnedModel);
+public class EmoteBone extends ModelBone {
+
+    public EmoteBone(TemplateBone templateBone, PlayerModel playerModel) {
+        super(templateBone,playerModel);
     }
 
     @Override
@@ -45,12 +42,9 @@ public class ModelBoneImpl extends ModelBone {
         finalPivot.multiply(0.0625d);
         var finalLocation = loc.clone().add(finalPivot);
 
-        if (getSpawnedModel() instanceof PlayerModel) {
-            var limbType = LimbType.get(getTemplateBone().getName());
-            if (limbType != null) {
-                finalLocation.add(0.3125,0.09,0);
-            }
-        }
+        Vector v = new Vector(0.3125,0.09,0);
+        v.rotateAroundY(-Math.toRadians(loc.getYaw()));
+        finalLocation.add(v);
 
         getBoneEntity().setHeadPose(finalRotation);
         getBoneEntity().teleport(
@@ -83,40 +77,19 @@ public class ModelBoneImpl extends ModelBone {
 
         loc.add(finalPivot);
 
-        setBoneEntity(new BoneEntityImpl(this,AquaticModelEngine.getInstance().getEntityHandler().spawn(loc, armorStand -> {
+        setBoneEntity(new BoneEntityImpl(this, AquaticModelEngine.getInstance().getEntityHandler().spawn(loc, armorStand -> {
             armorStand.setGravity(false);
             armorStand.setMarker(true);
             armorStand.setPersistent(false);
             armorStand.setInvisible(true);
             armorStand.setRotation(yaw,0);
-
-            ItemStack is;
-            if (!(getSpawnedModel() instanceof PlayerModel && getTemplateBone().getName().equalsIgnoreCase("player_root"))) {
-                if (getSpawnedModel() instanceof PlayerModel playerModel
-                        && getTemplateBone() instanceof PlayerTemplateBone playerTemplateBone) {
-                    armorStand.setRightArmPose(EulerAngle.ZERO);
-                    armorStand.setLeftArmPose(EulerAngle.ZERO);
-                    is = AquaticModelEngine.getInstance().getNmsHandler().setSkullTexture(null,playerModel.getTexture());
-                    var im = is.getItemMeta();
-                    im.setCustomModelData(playerTemplateBone.getModelId(playerModel.getTexture().isSlim()));
-                    is.setItemMeta(im);
-                    armorStand.getEquipment().setItem(EquipmentSlot.HAND,is);
-
-                } else {
-                    Bukkit.broadcastMessage("Spawning regular bone: "+getTemplateBone().getName());
-                    is = new ItemStack(getTemplateBone().getMaterial());
-                    var im = is.getItemMeta();
-                    LeatherArmorMeta lam = (LeatherArmorMeta) im;
-                    lam.setColor(Color.fromRGB(255,255,255));
-                    lam.setCustomModelData(getTemplateBone().getModelId());
-                    Bukkit.broadcastMessage("ModelId: "+getTemplateBone().getModelId());
-                    is.setItemMeta(lam);
-                    armorStand.getEquipment().setHelmet(is);
-                }
-                armorStand.setHeadPose(finalRotation);
-            }
-        }))
-        );
+            armorStand.setRightArmPose(EulerAngle.ZERO);
+            var is = AquaticModelEngine.getInstance().getNmsHandler().setSkullTexture(null,getPlayerModel().getTexture());
+            var im = is.getItemMeta();
+            im.setCustomModelData(((PlayerTemplateBone)getTemplateBone()).getModelId(getPlayerModel().getTexture().isSlim()));
+            is.setItemMeta(im);
+            armorStand.getEquipment().setItem(EquipmentSlot.HAND,is);
+        })));
     }
 
     @Override
@@ -188,5 +161,9 @@ public class ModelBoneImpl extends ModelBone {
     @Override
     public void hide(Player player) {
         getBoneEntity().hide(player);
+    }
+
+    public PlayerModel getPlayerModel() {
+        return (PlayerModel)getSpawnedModel();
     }
 }

@@ -25,6 +25,7 @@ public final class AquaticModelEngine extends JavaPlugin {
     public void onLoad() {
         modelHandler = new ModelHandler();
         AquaticModelEngineAPI.api = new AquaticModelEngineAPI(modelHandler);
+        AquaticModelEngineAPI.pluginInstance = this;
     }
     @Override
     public void onEnable() {

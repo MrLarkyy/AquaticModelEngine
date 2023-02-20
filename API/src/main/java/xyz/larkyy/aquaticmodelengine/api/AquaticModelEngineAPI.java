@@ -3,6 +3,7 @@ package xyz.larkyy.aquaticmodelengine.api;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.plugin.java.JavaPlugin;
 import xyz.larkyy.aquaticmodelengine.api.model.IModelHandler;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
@@ -13,6 +14,7 @@ import java.util.UUID;
 public class AquaticModelEngineAPI {
 
     public static AquaticModelEngineAPI api;
+    public static JavaPlugin pluginInstance;
 
     public IModelHandler modelHandler;
 
