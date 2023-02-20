@@ -1,6 +1,8 @@
 package xyz.larkyy.aquaticmodelengine.api.model.holder;
 
 import org.bukkit.Location;
+import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 
@@ -56,5 +58,13 @@ public abstract class ModelHolder {
     public abstract UUID getUniqueId();
 
     public abstract void remove();
+
+    public EulerAngle getRotation() {
+        return EulerAngle.ZERO;
+    }
+
+    public Vector getPivot() {
+        return new Vector();
+    }
 
 }

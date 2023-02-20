@@ -16,10 +16,8 @@ public class PlayerBoneReader extends AbstractBoneReader{
         ModelBone modelBone;
         if (spawnedModel instanceof PlayerModel playerModel) {
             modelBone = new EmoteBone(templateBone,playerModel);
-            Bukkit.broadcastMessage("Loaded emote bone");
         } else {
             modelBone = new EmptyBone(templateBone,spawnedModel);
-            Bukkit.broadcastMessage("Loaded empty bone");
         }
 
         modelBone.setParent(parentBone);

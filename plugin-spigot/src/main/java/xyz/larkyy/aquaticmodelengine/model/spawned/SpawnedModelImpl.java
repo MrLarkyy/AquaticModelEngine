@@ -1,5 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.model.spawned;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
@@ -54,16 +55,13 @@ public class SpawnedModelImpl extends SpawnedModel {
 
     @Override
     public void tick() {
-        getRenderHandler().checkViewers();
         getAnimationHandler().update();
-        /*
-        for (var bone : bones.values()) {
-            bone.tick();
-        }
-         */
+
+        var r = getModelHolder().getRotation();
         for (var bone : getParentBones().values()) {
-            bone.tick(new Vector(), EulerAngle.ZERO);
+            bone.tick(getModelHolder().getPivot(), getModelHolder().getRotation());
         }
+        getRenderHandler().checkViewers();
     }
 
     @Override
@@ -74,7 +72,7 @@ public class SpawnedModelImpl extends SpawnedModel {
     @Override
     public void applyModel() {
         for (var model : getParentBones().values()) {
-            model.spawnModel(new Vector(), EulerAngle.ZERO);
+            model.spawnModel(getModelHolder().getPivot(), getModelHolder().getRotation());
         }
     }
 

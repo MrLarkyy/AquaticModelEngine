@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
+import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.AttachmentModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
@@ -37,6 +38,8 @@ public class BasicBone extends ModelBone {
             bone.tick(finalPivot.clone(),finalRotation);
         }
 
+        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
+
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
         finalPivot.multiply(0.0625d);
         var finalLocation = loc.clone().add(finalPivot);
@@ -63,6 +66,7 @@ public class BasicBone extends ModelBone {
         for (var bone : getChildren()) {
             bone.spawnModel(finalPivot.clone(),finalRotation);
         }
+        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
 
         if (getBoneEntity() != null) {
             removeModel();
@@ -85,7 +89,6 @@ public class BasicBone extends ModelBone {
             LeatherArmorMeta lam = (LeatherArmorMeta) im;
             lam.setColor(Color.fromRGB(255,255,255));
             lam.setCustomModelData(getTemplateBone().getModelId());
-            Bukkit.broadcastMessage("ModelId: "+getTemplateBone().getModelId());
             is.setItemMeta(lam);
             armorStand.getEquipment().setHelmet(is);
             armorStand.setHeadPose(finalRotation);
@@ -96,6 +99,7 @@ public class BasicBone extends ModelBone {
     public void removeModel() {
         Bukkit.getOnlinePlayers().forEach(p -> getBoneEntity().hide(p));
         getBoneEntity().remove();
+        getAttachmentModelHolder().getSpawnedModels().values().forEach(SpawnedModel::removeModel);
     }
 
     @Override
@@ -112,7 +116,7 @@ public class BasicBone extends ModelBone {
         var animationRotation = getSpawnedModel().getAnimationHandler().getRotation(this);
         rotation = rotation.add(animationRotation.getX(),animationRotation.getY(),animationRotation.getZ());
 
-        if (getParent() != null) {
+        if (getParent() != null || getSpawnedModel().getModelHolder() instanceof AttachmentModelHolder) {
             var parentRotation = parentAngle;
             parentRotation = new EulerAngle(
                     parentRotation.getX(),
@@ -141,6 +145,13 @@ public class BasicBone extends ModelBone {
 
         if (getParent() != null) {
             pivot = getParent().getTemplateBone().getOrigin().clone().subtract(pivot);
+            pivot.rotateAroundX(parentRotation.getX());
+            pivot.rotateAroundY(-parentRotation.getY());
+            pivot.rotateAroundZ(-parentRotation.getZ());
+
+            pivot = parentPivot.clone().subtract(pivot);
+        } else if (getSpawnedModel().getModelHolder() instanceof AttachmentModelHolder attachmentModelHolder) {
+            pivot = attachmentModelHolder.getParentOrigin().clone().subtract(pivot);
             pivot.rotateAroundX(parentRotation.getX());
             pivot.rotateAroundY(-parentRotation.getY());
             pivot.rotateAroundZ(-parentRotation.getZ());

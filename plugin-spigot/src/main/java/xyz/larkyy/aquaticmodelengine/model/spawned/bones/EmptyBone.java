@@ -6,7 +6,6 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
-import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
 import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
 
@@ -29,6 +28,8 @@ public class EmptyBone extends ModelBone {
             bone.tick(finalPivot.clone(),finalRotation);
         }
 
+        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
+
         /*
         getBoneEntity().setHeadPose(finalRotation);
         getBoneEntity().teleport(
@@ -42,20 +43,18 @@ public class EmptyBone extends ModelBone {
         if (getSpawnedModel().getModelHolder() == null) {
             return;
         }
-        var loc = getSpawnedModel().getModelHolder().getLocation().clone();
-
-        var yaw = loc.getYaw();
-
         var finalPivot = getFinalPivot(parentPivot,parentAngle).clone();
         var finalRotation = getFinalRotation(parentAngle);
 
         for (var bone : getChildren()) {
             bone.spawnModel(finalPivot.clone(),finalRotation);
         }
+        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
     }
 
     @Override
     public void removeModel() {
+        getAttachmentModelHolder().getSpawnedModels().values().forEach(SpawnedModel::removeModel);
     }
 
     @Override
@@ -118,9 +117,5 @@ public class EmptyBone extends ModelBone {
     @Override
     public void hide(Player player) {
         //getBoneEntity().hide(player);
-    }
-
-    public PlayerModel getPlayerModel() {
-        return (PlayerModel)getSpawnedModel();
     }
 }

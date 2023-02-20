@@ -17,7 +17,6 @@ public class BasicBoneReader extends AbstractBoneReader {
             modelBone.getChildren().add(getBoneReader().loadBone(tB,loadedBones,modelBone,spawnedModel));
         }
         loadedBones.put(templateBone.getName(), modelBone);
-        Bukkit.broadcastMessage("Loaded basic bone");
         return modelBone;
     }
 

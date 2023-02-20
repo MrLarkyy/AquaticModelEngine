@@ -8,6 +8,7 @@ import xyz.larkyy.aquaticmodelengine.api.model.IModelHandler;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.DummyModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.EntityModelHolder;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;
 import xyz.larkyy.aquaticmodelengine.model.player.PlayerModelImpl;
@@ -33,9 +34,18 @@ public class ModelHandler implements IModelHandler {
 
     public SpawnedModelImpl spawnModel(ModelHolder modelHolder, String model) {
         var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getTemplate(model);
-        var spawned = spawnModel(modelHolder,m);
+        return spawnModel(modelHolder,m);
+    }
+
+    public SpawnedModel attachModel(ModelBone modelBone, String model) {
+        var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getTemplate(model);
+        return attachModel(modelBone,m);
+    }
+    public SpawnedModel attachModel(ModelBone modelBone, ModelTemplateImpl template) {
+        var holder = modelBone.getAttachmentModelHolder();
+        var spawned = new SpawnedModelImpl(holder,template);
+        holder.addModel(spawned);
         spawned.applyModel();
-        modelHolder.addModel(spawned);
         return spawned;
     }
 

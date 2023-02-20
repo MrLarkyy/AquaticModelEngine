@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;
 
@@ -25,4 +26,7 @@ public interface IModelHandler {
     SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template);
     SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote);
     SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template);
+
+    SpawnedModel attachModel(ModelBone modelBone, String model);
+    SpawnedModel attachModel(ModelBone modelBone, ModelTemplateImpl template);
 }

@@ -8,9 +8,9 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
-import xyz.larkyy.aquaticmodelengine.api.model.template.player.LimbType;
 import xyz.larkyy.aquaticmodelengine.api.model.template.player.PlayerTemplateBone;
 import xyz.larkyy.aquaticmodelengine.model.spawned.BoneEntityImpl;
 import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
@@ -37,6 +37,7 @@ public class EmoteBone extends ModelBone {
         for (var bone : getChildren()) {
             bone.tick(finalPivot.clone(),finalRotation);
         }
+        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
 
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
         finalPivot.multiply(0.0625d);
@@ -67,6 +68,7 @@ public class EmoteBone extends ModelBone {
         for (var bone : getChildren()) {
             bone.spawnModel(finalPivot.clone(),finalRotation);
         }
+        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
 
         if (getBoneEntity() != null) {
             removeModel();
@@ -76,6 +78,10 @@ public class EmoteBone extends ModelBone {
         finalPivot.multiply(0.0625d);
 
         loc.add(finalPivot);
+
+        Vector v = new Vector(0.3125,0.09,0);
+        v.rotateAroundY(-Math.toRadians(loc.getYaw()));
+        loc.add(v);
 
         setBoneEntity(new BoneEntityImpl(this, AquaticModelEngine.getInstance().getEntityHandler().spawn(loc, armorStand -> {
             armorStand.setGravity(false);
@@ -95,6 +101,7 @@ public class EmoteBone extends ModelBone {
     @Override
     public void removeModel() {
         Bukkit.getOnlinePlayers().forEach(p -> getBoneEntity().hide(p));
+        getAttachmentModelHolder().getSpawnedModels().values().forEach(SpawnedModel::removeModel);
         getBoneEntity().remove();
     }
 

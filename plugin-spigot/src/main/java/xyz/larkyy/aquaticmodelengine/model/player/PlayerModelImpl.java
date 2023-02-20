@@ -76,7 +76,7 @@ public class PlayerModelImpl extends PlayerModel {
         }
          */
         for (var bone : getParentBones().values()) {
-            bone.tick(new Vector(), EulerAngle.ZERO);
+            bone.tick(getModelHolder().getPivot(), getModelHolder().getRotation());
         }
         getRenderHandler().checkViewers();
     }
@@ -89,7 +89,7 @@ public class PlayerModelImpl extends PlayerModel {
     @Override
     public void applyModel() {
         for (var model : getParentBones().values()) {
-            model.spawnModel(new Vector(), EulerAngle.ZERO);
+            model.spawnModel(getModelHolder().getPivot(), getModelHolder().getRotation());
         }
         tick();
     }
