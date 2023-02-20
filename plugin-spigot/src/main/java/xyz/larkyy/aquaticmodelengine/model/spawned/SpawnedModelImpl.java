@@ -85,6 +85,11 @@ public class SpawnedModelImpl extends SpawnedModel {
     }
 
     @Override
+    public void spawn(Player player) {
+        getBones().values().forEach(bone -> bone.show(player));
+    }
+
+    @Override
     public void show() {
         getRenderHandler().show();
     }

@@ -53,6 +53,9 @@ public class FakeArmorStandImpl implements FakeArmorStand {
         armorStand.setHeadPose(new Rotations((float) Math.toDegrees(eulerAngle.getX()),
                 (float) Math.toDegrees(eulerAngle.getY()),
                 (float) Math.toDegrees(eulerAngle.getZ())));
+        armorStand.setRightArmPose(new Rotations((float) Math.toDegrees(eulerAngle.getX()),
+                (float) Math.toDegrees(eulerAngle.getY()),
+                (float) Math.toDegrees(eulerAngle.getZ())));
     }
 
     public void setHeadItem(ItemStack itemStack) {
@@ -138,7 +141,8 @@ public class FakeArmorStandImpl implements FakeArmorStand {
     private List<Packet<?>> updateEquipmentPackets() {
         List<Packet<?>> packets = new ArrayList<>();
         var packet = new ClientboundSetEquipmentPacket(armorStand.getId(), List.of(
-                new Pair<>(EquipmentSlot.HEAD, armorStand.getItemBySlot(EquipmentSlot.HEAD))
+                new Pair<>(EquipmentSlot.HEAD, armorStand.getItemBySlot(EquipmentSlot.HEAD)),
+                new Pair<>(EquipmentSlot.MAINHAND, armorStand.getItemBySlot(EquipmentSlot.MAINHAND))
         ));
         packets.add(packet);
         return packets;

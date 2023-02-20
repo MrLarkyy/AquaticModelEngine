@@ -11,8 +11,12 @@ import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.TextureWrapper;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplate;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
+import xyz.larkyy.aquaticmodelengine.api.model.template.player.LimbType;
 import xyz.larkyy.aquaticmodelengine.model.RenderHandlerImpl;
 import xyz.larkyy.aquaticmodelengine.model.spawned.ModelBoneImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerModelImpl extends PlayerModel {
 
@@ -85,7 +89,7 @@ public class PlayerModelImpl extends PlayerModel {
     @Override
     public void applyModel() {
         for (var model : getParentBones().values()) {
-            model.spawnModel(new Vector(), EulerAngle.ZERO);
+            model.spawnModel(new Vector(0.313D, -1.8520400014901162D, 0.0D), EulerAngle.ZERO);
         }
     }
 
@@ -93,6 +97,24 @@ public class PlayerModelImpl extends PlayerModel {
     public void removeModel() {
         for (var model : getBones().values()) {
             model.removeModel();
+        }
+    }
+
+    @Override
+    public void spawn(Player player) {
+        List<ModelBone> spawnedBones = new ArrayList<>();
+        for (LimbType type : LimbType.values()) {
+            if (getBones().containsKey(type.toString().toLowerCase())) {
+                var bone = getBone(type.toString().toLowerCase());
+                bone.show(player);
+                spawnedBones.add(bone);
+            }
+        }
+        for (ModelBone bone : getBones().values()) {
+            if (spawnedBones.contains(bone)) {
+                continue;
+            }
+            bone.show(player);
         }
     }
 

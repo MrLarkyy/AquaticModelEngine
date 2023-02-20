@@ -70,6 +70,8 @@ public abstract class SpawnedModel {
         this.renderHandler = renderHandler;
     }
 
+    public abstract void spawn(Player player);
+
     public abstract void show();
 
     public abstract void hide();

@@ -88,9 +88,7 @@ public class RenderHandlerImpl extends RenderHandler {
 
         getSeenBy().add(player.getUniqueId());
 
-        getSpawnedModel().getBones().values().forEach(bone -> {
-            bone.show(player);
-        });
+        getSpawnedModel().spawn(player);
     }
 
     @Override

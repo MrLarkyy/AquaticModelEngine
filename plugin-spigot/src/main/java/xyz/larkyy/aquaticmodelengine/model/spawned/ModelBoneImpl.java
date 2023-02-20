@@ -5,6 +5,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.util.EulerAngle;
@@ -14,6 +15,7 @@ import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
+import xyz.larkyy.aquaticmodelengine.api.model.template.player.LimbType;
 import xyz.larkyy.aquaticmodelengine.api.model.template.player.PlayerTemplateBone;
 import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
 
@@ -42,6 +44,13 @@ public class ModelBoneImpl extends ModelBone {
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
         finalPivot.multiply(0.0625d);
         var finalLocation = loc.clone().add(finalPivot);
+
+        if (getSpawnedModel() instanceof PlayerModel) {
+            var limbType = LimbType.get(getTemplateBone().getName());
+            if (limbType != null) {
+                finalLocation.add(0.3125,0.09,0);
+            }
+        }
 
         getBoneEntity().setHeadPose(finalRotation);
         getBoneEntity().teleport(
@@ -82,25 +91,30 @@ public class ModelBoneImpl extends ModelBone {
             armorStand.setRotation(yaw,0);
 
             ItemStack is;
-            if (getSpawnedModel() instanceof PlayerModel playerModel
-                    && getTemplateBone() instanceof PlayerTemplateBone playerTemplateBone) {
-                is = new ItemStack(Material.PLAYER_HEAD);
-                is = AquaticModelEngine.getInstance().getNmsHandler().setSkullTexture(is,playerModel.getTexture());
-                var im = is.getItemMeta();
-                im.setCustomModelData(playerTemplateBone.getModelId(playerModel.getTexture().isSlim()));
-                is.setItemMeta(im);
+            if (!(getSpawnedModel() instanceof PlayerModel && getTemplateBone().getName().equalsIgnoreCase("player_root"))) {
+                if (getSpawnedModel() instanceof PlayerModel playerModel
+                        && getTemplateBone() instanceof PlayerTemplateBone playerTemplateBone) {
+                    armorStand.setRightArmPose(EulerAngle.ZERO);
+                    armorStand.setLeftArmPose(EulerAngle.ZERO);
+                    is = AquaticModelEngine.getInstance().getNmsHandler().setSkullTexture(null,playerModel.getTexture());
+                    var im = is.getItemMeta();
+                    im.setCustomModelData(playerTemplateBone.getModelId(playerModel.getTexture().isSlim()));
+                    is.setItemMeta(im);
+                    armorStand.getEquipment().setItem(EquipmentSlot.HAND,is);
 
-            } else {
-
-                is = new ItemStack(getTemplateBone().getMaterial());
-                var im = is.getItemMeta();
-                LeatherArmorMeta lam = (LeatherArmorMeta) im;
-                lam.setColor(Color.fromRGB(255,255,255));
-                lam.setCustomModelData(getTemplateBone().getModelId());
-                is.setItemMeta(lam);
+                } else {
+                    Bukkit.broadcastMessage("Spawning regular bone: "+getTemplateBone().getName());
+                    is = new ItemStack(getTemplateBone().getMaterial());
+                    var im = is.getItemMeta();
+                    LeatherArmorMeta lam = (LeatherArmorMeta) im;
+                    lam.setColor(Color.fromRGB(255,255,255));
+                    lam.setCustomModelData(getTemplateBone().getModelId());
+                    Bukkit.broadcastMessage("ModelId: "+getTemplateBone().getModelId());
+                    is.setItemMeta(lam);
+                    armorStand.getEquipment().setHelmet(is);
+                }
+                armorStand.setHeadPose(finalRotation);
             }
-            armorStand.getEquipment().setHelmet(is);
-            armorStand.setHeadPose(finalRotation);
         }))
         );
     }
