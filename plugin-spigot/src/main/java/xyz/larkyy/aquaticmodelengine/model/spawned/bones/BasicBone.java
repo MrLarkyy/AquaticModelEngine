@@ -30,7 +30,6 @@ public class BasicBone extends ModelBone {
             return;
         }
         var loc = getSpawnedModel().getModelHolder().getLocation().clone().add(0,-1.4375,0);
-
         var finalPivot = getFinalPivot(parentPivot,parentAngle).clone();
         var finalRotation = getFinalRotation(parentAngle);
 
@@ -38,12 +37,12 @@ public class BasicBone extends ModelBone {
             bone.tick(finalPivot.clone(),finalRotation);
         }
 
-        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
 
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
         finalPivot.multiply(0.0625d);
         var finalLocation = loc.clone().add(finalPivot);
 
+        getAttachmentModelHolder().tick(finalLocation.clone(),finalRotation);
 
         getBoneEntity().setHeadPose(finalRotation);
         getBoneEntity().teleport(
@@ -66,7 +65,6 @@ public class BasicBone extends ModelBone {
         for (var bone : getChildren()) {
             bone.spawnModel(finalPivot.clone(),finalRotation);
         }
-        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
 
         if (getBoneEntity() != null) {
             removeModel();
@@ -76,6 +74,7 @@ public class BasicBone extends ModelBone {
         finalPivot.multiply(0.0625d);
 
         loc.add(finalPivot);
+        getAttachmentModelHolder().tick(loc.clone(),finalRotation);
 
         setBoneEntity(new BoneEntityImpl(this,AquaticModelEngine.getInstance().getEntityHandler().spawn(loc, armorStand -> {
             armorStand.setGravity(false);
@@ -145,13 +144,6 @@ public class BasicBone extends ModelBone {
 
         if (getParent() != null) {
             pivot = getParent().getTemplateBone().getOrigin().clone().subtract(pivot);
-            pivot.rotateAroundX(parentRotation.getX());
-            pivot.rotateAroundY(-parentRotation.getY());
-            pivot.rotateAroundZ(-parentRotation.getZ());
-
-            pivot = parentPivot.clone().subtract(pivot);
-        } else if (getSpawnedModel().getModelHolder() instanceof AttachmentModelHolder attachmentModelHolder) {
-            pivot = attachmentModelHolder.getParentOrigin().clone().subtract(pivot);
             pivot.rotateAroundX(parentRotation.getX());
             pivot.rotateAroundY(-parentRotation.getY());
             pivot.rotateAroundZ(-parentRotation.getZ());

@@ -37,15 +37,16 @@ public class EmoteBone extends ModelBone {
         for (var bone : getChildren()) {
             bone.tick(finalPivot.clone(),finalRotation);
         }
-        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
 
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
         finalPivot.multiply(0.0625d);
         var finalLocation = loc.clone().add(finalPivot);
+        getAttachmentModelHolder().tick(finalLocation.clone(),finalRotation);
 
         Vector v = new Vector(0.3125,0.09,0);
         v.rotateAroundY(-Math.toRadians(loc.getYaw()));
         finalLocation.add(v);
+
 
         getBoneEntity().setHeadPose(finalRotation);
         getBoneEntity().teleport(
@@ -68,7 +69,6 @@ public class EmoteBone extends ModelBone {
         for (var bone : getChildren()) {
             bone.spawnModel(finalPivot.clone(),finalRotation);
         }
-        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
 
         if (getBoneEntity() != null) {
             removeModel();
@@ -83,6 +83,7 @@ public class EmoteBone extends ModelBone {
         v.rotateAroundY(-Math.toRadians(loc.getYaw()));
         loc.add(v);
 
+        getAttachmentModelHolder().tick(loc.clone(),finalRotation);
         setBoneEntity(new BoneEntityImpl(this, AquaticModelEngine.getInstance().getEntityHandler().spawn(loc, armorStand -> {
             armorStand.setGravity(false);
             armorStand.setMarker(true);

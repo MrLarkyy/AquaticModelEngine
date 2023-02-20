@@ -35,7 +35,7 @@ public class Listeners implements Listener {
                     var holder = AquaticModelEngine.getInstance().getModelHandler().getModelHolder(e.getPlayer());
                     var spawned = AquaticModelEngine.getInstance().getModelHandler().spawnEmote(holder,e.getPlayer(),"steve2");
                     spawned.playAnimation("wave",1);
-                    var bone = spawned.getBone("left_forearm");
+                    var bone = spawned.getBone("head");
                     AquaticModelEngine.getInstance().getModelHandler().attachModel(bone,"big_otter");
                     new BukkitRunnable() {
                         @Override

@@ -24,11 +24,21 @@ public class EmptyBone extends ModelBone {
         var finalPivot = getFinalPivot(parentPivot,parentAngle).clone();
         var finalRotation = getFinalRotation(parentAngle);
 
+        var loc = getSpawnedModel().getModelHolder().getLocation().clone().add(0,-1.4375,0);
+
         for (var bone : getChildren()) {
             bone.tick(finalPivot.clone(),finalRotation);
         }
 
-        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
+        finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
+        finalPivot.multiply(0.0625d);
+        var finalLocation = loc.clone().add(finalPivot);
+
+        Vector v = new Vector(0.3125,0.09,0);
+        v.rotateAroundY(-Math.toRadians(loc.getYaw()));
+        finalLocation.add(v);
+
+        getAttachmentModelHolder().tick(finalLocation.clone(),finalRotation);
 
         /*
         getBoneEntity().setHeadPose(finalRotation);
@@ -46,10 +56,21 @@ public class EmptyBone extends ModelBone {
         var finalPivot = getFinalPivot(parentPivot,parentAngle).clone();
         var finalRotation = getFinalRotation(parentAngle);
 
+        var loc = getSpawnedModel().getModelHolder().getLocation().clone().add(0,-1.4375,0);
+
         for (var bone : getChildren()) {
             bone.spawnModel(finalPivot.clone(),finalRotation);
         }
-        getAttachmentModelHolder().tick(finalPivot.clone(),finalRotation);
+
+        finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
+        finalPivot.multiply(0.0625d);
+        var finalLocation = loc.clone().add(finalPivot);
+
+        Vector v = new Vector(0.3125,0.09,0);
+        v.rotateAroundY(-Math.toRadians(loc.getYaw()));
+        finalLocation.add(v);
+
+        getAttachmentModelHolder().tick(finalLocation.clone(),finalRotation);
     }
 
     @Override
