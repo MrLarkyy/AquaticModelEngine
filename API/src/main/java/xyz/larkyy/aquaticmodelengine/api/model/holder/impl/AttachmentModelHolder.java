@@ -52,9 +52,6 @@ public class AttachmentModelHolder extends ModelHolder {
 
     public void tick(Location location, EulerAngle rotation) {
         this.location = location;
-        if (modelBone.getTemplateBone().getName().equalsIgnoreCase("head")) {
-            Bukkit.broadcastMessage("Location: "+location.getX()+" "+location.getY()+" "+location.getZ());
-        }
         this.rotation = rotation;
         super.tick();
     }
