@@ -6,8 +6,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.larkyy.aquaticmodelengine.api.event.EmoteEndEvent;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 
 public class Listeners implements Listener {
+
+    private SpawnedModel spawnedModel;
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
@@ -54,6 +57,36 @@ public class Listeners implements Listener {
                             null);
                     var bone = spawned.getBone("head");
                     AquaticModelEngine.getInstance().getModelHandler().attachModel(bone,"big_otter");
+
+                }
+            }.runTask(AquaticModelEngine.getInstance());
+        }
+        if (e.getMessage().toLowerCase().contains("play emote glider")) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    e.getPlayer().setInvisible(true);
+                    var holder = AquaticModelEngine.getInstance().getModelHandler().getModelHolder(e.getPlayer());
+                    spawnedModel = AquaticModelEngine.getInstance().getModelHandler().spawnEmote(
+                            holder,
+                            e.getPlayer(),
+                            "glideremote",
+                            "pre",
+                            "animation",
+                            null);
+
+                }
+            }.runTask(AquaticModelEngine.getInstance());
+        }
+
+        if (e.getMessage().toLowerCase().contains("stop emote")) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (spawnedModel == null) {
+                        return;
+                    }
+                    spawnedModel.getAnimationHandler().stopAnimation("animation");
 
                 }
             }.runTask(AquaticModelEngine.getInstance());

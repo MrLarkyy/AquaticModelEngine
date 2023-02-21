@@ -55,9 +55,11 @@ public class BlockBenchParser {
         ModelTemplateImpl modelTemplate = new ModelTemplateImpl(name);
         this.modelTemplate = modelTemplate;
 
+        var resolution = loadResolution(object.getAsJsonObject("resolution"));
+
         loadElements(object.getAsJsonArray("elements"));
         loadTextures(object.getAsJsonArray("textures"));
-        loadBones(object.getAsJsonArray("outliner"),modelTemplate,true);
+        loadBones(object.getAsJsonArray("outliner"),modelTemplate,resolution,true);
         loadAnimations(object.getAsJsonArray("animations"));
 
         File mainFolder = AquaticModelEngine.getPlugin(AquaticModelEngine.class).getDataFolder();
@@ -117,9 +119,11 @@ public class BlockBenchParser {
         ModelTemplateImpl modelTemplate = new ModelTemplateImpl(name);
         this.modelTemplate = modelTemplate;
 
+        var resolution = loadResolution(object.getAsJsonObject("resolution"));
+
         loadElements(object.getAsJsonArray("elements"));
         loadTextures(object.getAsJsonArray("textures"));
-        loadBones(object.getAsJsonArray("outliner"),modelTemplate,false);
+        loadBones(object.getAsJsonArray("outliner"),modelTemplate,resolution,false);
         loadAnimations(object.getAsJsonArray("animations"));
 
         File mainFolder = AquaticModelEngine.getPlugin(AquaticModelEngine.class).getDataFolder();
@@ -151,6 +155,12 @@ public class BlockBenchParser {
         return modelTemplate;
     }
 
+    private BBResolution loadResolution(JsonObject object) {
+        Gson gson = new Gson();
+        var resolution = gson.fromJson(object, BBResolution.class);
+        return resolution;
+    }
+
     private List<BBElement> loadElements(JsonArray array) {
         List<BBElement> list = new ArrayList<>();
         for (var item : array) {
@@ -169,15 +179,15 @@ public class BlockBenchParser {
         return element;
     }
 
-    private List<BBBone> loadBones(JsonArray array, ModelTemplateImpl template, boolean emote) {
+    private List<BBBone> loadBones(JsonArray array, ModelTemplateImpl template, BBResolution resolution, boolean emote) {
         List<BBBone> bones = new ArrayList<>();
         for (var item : array) {
-            bones.add(loadBone(item.getAsJsonObject(),template.getBones(),null,emote));
+            bones.add(loadBone(item.getAsJsonObject(),template.getBones(),null,resolution, emote));
         }
         return bones;
     }
 
-    private BBBone loadBone(JsonObject object, List<TemplateBone> bones, TemplateBone parentBone, boolean emote) {
+    private BBBone loadBone(JsonObject object, List<TemplateBone> bones, TemplateBone parentBone, BBResolution resolution, boolean emote) {
         Gson gson = new Gson();
         var bone = gson.fromJson(object, BBBone.class);
         EulerAngle rotation;
@@ -222,7 +232,7 @@ public class BlockBenchParser {
         if (object.has("children")) {
             for (var item : object.getAsJsonArray("children")) {
                 if (item.isJsonObject()) {
-                    var subBone = loadBone(item.getAsJsonObject(),templateBone.getChildren(), templateBone,emote);
+                    var subBone = loadBone(item.getAsJsonObject(),templateBone.getChildren(), templateBone,resolution,emote);
                     bone.getChildren().add(subBone);
                 } else {
                     if (templateBone instanceof PlayerTemplateBoneImpl) {
@@ -248,12 +258,12 @@ public class BlockBenchParser {
                         cachedJavaItems.put(bone.getName(),javaItem);
                     }
                     Map<String, JavaFace> javaFaces = new HashMap<>();
-                    javaFaces.put("up",new JavaFace(element.getFaces().getUp()));
-                    javaFaces.put("down",new JavaFace(element.getFaces().getDown()));
-                    javaFaces.put("south",new JavaFace(element.getFaces().getSouth()));
-                    javaFaces.put("north",new JavaFace(element.getFaces().getNorth()));
-                    javaFaces.put("east",new JavaFace(element.getFaces().getEast()));
-                    javaFaces.put("west",new JavaFace(element.getFaces().getWest()));
+                    javaFaces.put("up",new JavaFace(element.getFaces().getUp(),resolution));
+                    javaFaces.put("down",new JavaFace(element.getFaces().getDown(),resolution));
+                    javaFaces.put("south",new JavaFace(element.getFaces().getSouth(),resolution));
+                    javaFaces.put("north",new JavaFace(element.getFaces().getNorth(),resolution));
+                    javaFaces.put("east",new JavaFace(element.getFaces().getEast(),resolution));
+                    javaFaces.put("west",new JavaFace(element.getFaces().getWest(),resolution));
 
                     double[] newFrom = new double[]{
                             element.getFrom()[0]-bone.getOrigin()[0],
