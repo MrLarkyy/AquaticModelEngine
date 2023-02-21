@@ -20,9 +20,6 @@ public class RunningAnimation {
         this.templateAnimation = templateAnimation;
         this.speed = speed;
     }
-    public RunningAnimation(AnimationHandler animationHandler, TemplateAnimation templateAnimation) {
-        this(animationHandler, templateAnimation,1d);
-    }
 
     public void setSpeed(double speed) {
         this.speed = speed;
