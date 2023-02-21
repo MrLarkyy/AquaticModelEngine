@@ -33,19 +33,14 @@ public class EmoteBone extends ModelBone {
         float offsetYaw = 0;
 
         var loc = getSpawnedModel().getModelHolder().getLocation().clone().add(0,-1.4375,0);
-        loc.setYaw(getSpawnedModel().getModelHolder().getBodyRotation());
-        if (getPlayerModel().rotateHead()) {
-            var limbType = ((PlayerTemplateBone)getTemplateBone()).getLimbType();
-            if (limbType == LimbType.HEAD) {
-                var rot1 = getSpawnedModel().getModelHolder().getBodyRotation();
-                var rot2 = getSpawnedModel().getModelHolder().getHeadRotation();
+        if (getPlayerModel().rotateHead() && ((PlayerTemplateBone)getTemplateBone()).getLimbType() == LimbType.HEAD) {
+            var rot1 = getSpawnedModel().getModelHolder().getBodyRotation();
+            var rot2 = getSpawnedModel().getModelHolder().getHeadRotation();
 
-                offsetYaw = rot2-rot1;
-                loc.setYaw(getSpawnedModel().getModelHolder().getHeadRotation());
-
-                //parentAngle = quatMul(parentAngle,new EulerAngle(0,Math.toRadians(resultRot),0));
-                //loc.setYaw(getPlayerModel().getModelHolder().getHeadRotation());
-            }
+            offsetYaw = rot2-rot1;
+            loc.setYaw(getSpawnedModel().getModelHolder().getHeadRotation());
+        } else {
+            loc.setYaw(getSpawnedModel().getModelHolder().getBodyRotation());
         }
 
 
