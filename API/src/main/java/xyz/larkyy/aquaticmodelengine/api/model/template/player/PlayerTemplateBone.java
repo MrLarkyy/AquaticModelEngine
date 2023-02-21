@@ -22,4 +22,8 @@ public abstract class PlayerTemplateBone extends TemplateBone {
         }
         return limbType.getModelId();
     }
+
+    public LimbType getLimbType() {
+        return limbType;
+    }
 }

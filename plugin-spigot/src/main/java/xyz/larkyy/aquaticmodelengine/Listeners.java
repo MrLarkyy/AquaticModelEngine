@@ -38,7 +38,7 @@ public class Listeners implements Listener {
                             "openemote",
                             null,
                             "open",
-                            null);
+                            null,true);
                 }
             }.runTask(AquaticModelEngine.getInstance());
         }
@@ -54,9 +54,7 @@ public class Listeners implements Listener {
                             "steve2",
                             null,
                             "wave",
-                            null);
-                    var bone = spawned.getBone("head");
-                    AquaticModelEngine.getInstance().getModelHandler().attachModel(bone,"big_otter");
+                            null,true);
 
                 }
             }.runTask(AquaticModelEngine.getInstance());
@@ -73,7 +71,7 @@ public class Listeners implements Listener {
                             "glideremote",
                             "pre",
                             "animation",
-                            null);
+                            null,true);
 
                 }
             }.runTask(AquaticModelEngine.getInstance());

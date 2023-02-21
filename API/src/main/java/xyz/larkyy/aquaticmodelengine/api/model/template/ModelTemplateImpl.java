@@ -4,8 +4,6 @@ import xyz.larkyy.aquaticmodelengine.api.model.animation.TemplateAnimation;
 
 public class ModelTemplateImpl extends ModelTemplate {
 
-
-
     public void addAnimation(TemplateAnimation templateAnimation) {
         getAnimations().put(templateAnimation.getName(),templateAnimation);
     }

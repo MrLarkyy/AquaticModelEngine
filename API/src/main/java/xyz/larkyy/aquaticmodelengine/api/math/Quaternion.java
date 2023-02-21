@@ -1,4 +1,4 @@
-package xyz.larkyy.aquaticmodelengine.util.math;
+package xyz.larkyy.aquaticmodelengine.api.math;
 
 import org.bukkit.util.EulerAngle;
 import org.joml.Math;

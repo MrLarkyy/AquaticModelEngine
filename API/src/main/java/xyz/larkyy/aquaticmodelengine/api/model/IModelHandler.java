@@ -18,14 +18,15 @@ public interface IModelHandler {
     void deleteHolder(ModelHolder modelHolder);
     void removeHolder(ModelHolder modelHolder);
     ModelHolder getModelHolder(Entity entity);
+    ModelHolder getModelHolder(Player player);
     ModelHolder getModelHolder(UUID uuid);
     ModelHolder createDummyModelHolder(Location location);
     void tickModels();
 
-    SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote, String preAnimation, String animation, String postAnimation);
-    SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation);
-    SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote, String preAnimation, String animation, String postAnimation);
-    SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation);
+    SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote, String preAnimation, String animation, String postAnimation, boolean rotateHead);
+    SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation, boolean rotateHead);
+    SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote, String preAnimation, String animation, String postAnimation, boolean rotateHead);
+    SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation, boolean rotateHead);
 
     SpawnedModel attachModel(ModelBone modelBone, String model);
     SpawnedModel attachModel(ModelBone modelBone, ModelTemplateImpl template);

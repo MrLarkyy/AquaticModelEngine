@@ -8,6 +8,7 @@ import xyz.larkyy.aquaticmodelengine.api.model.IModelHandler;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.DummyModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.EntityModelHolder;
+import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.PlayerModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;
@@ -77,6 +78,17 @@ public class ModelHandler implements IModelHandler {
         }
         return holder;
     }
+    public ModelHolder getModelHolder(Player player) {
+        if (player == null) {
+            return null;
+        }
+        var holder = modelHolders.get(player.getUniqueId());
+        if (holder == null) {
+            holder = new PlayerModelHolder(player);
+            modelHolders.put(player.getUniqueId(),holder);
+        }
+        return holder;
+    }
 
     public ModelHolder getModelHolder(UUID uuid) {
         if (uuid == null) {
@@ -98,13 +110,15 @@ public class ModelHandler implements IModelHandler {
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote, String preAnimation, String animation, String postAnimation) {
+    public SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote, String preAnimation, String animation, String postAnimation, boolean rotateHead) {
         var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getEmote(emote);
-        return spawnEmote(holder,player,m,preAnimation,animation,postAnimation);
+        return spawnEmote(holder,player,m,preAnimation,animation,postAnimation,rotateHead);
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation) {
+    public SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template,
+                                   String preAnimation, String animation, String postAnimation,
+                                   boolean rotateHead) {
         if (template == null) {
             return null;
         }
@@ -113,20 +127,20 @@ public class ModelHandler implements IModelHandler {
         var animationTemplate = template.getAnimation(animation);
         var postAnimationTemplate = template.getAnimation(postAnimation);
 
-        var spawned = new PlayerModelImpl(template,holder,player,preAnimationTemplate,animationTemplate,postAnimationTemplate);
+        var spawned = new PlayerModelImpl(template,holder,player,preAnimationTemplate,animationTemplate,postAnimationTemplate,rotateHead);
         holder.setEmote(spawned);
         spawned.applyModel();
         return spawned;
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote, String preAnimation, String animation, String postAnimation) {
+    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote, String preAnimation, String animation, String postAnimation, boolean rotateHead) {
         var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getEmote(emote);
-        return spawnEmote(holder,url,slim,m,preAnimation,animation,postAnimation);
+        return spawnEmote(holder,url,slim,m,preAnimation,animation,postAnimation,rotateHead);
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation) {
+    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation, boolean rotateHead) {
         if (template == null) {
             return null;
         }
@@ -135,7 +149,7 @@ public class ModelHandler implements IModelHandler {
         var animationTemplate = template.getAnimation(animation);
         var postAnimationTemplate = template.getAnimation(postAnimation);
 
-        var spawned = new PlayerModelImpl(template,holder,url,slim, preAnimationTemplate, animationTemplate, postAnimationTemplate);
+        var spawned = new PlayerModelImpl(template,holder,url,slim, preAnimationTemplate, animationTemplate, postAnimationTemplate,rotateHead);
         holder.setEmote(spawned);
         spawned.applyModel();
         return spawned;

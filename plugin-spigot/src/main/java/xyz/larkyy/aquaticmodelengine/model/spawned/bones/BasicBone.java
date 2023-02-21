@@ -14,7 +14,7 @@ import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
 import xyz.larkyy.aquaticmodelengine.model.spawned.BoneEntityImpl;
-import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
+import xyz.larkyy.aquaticmodelengine.api.math.Quaternion;
 
 public class BasicBone extends ModelBone {
     public BasicBone(TemplateBone templateBone, SpawnedModel spawnedModel) {
@@ -30,6 +30,7 @@ public class BasicBone extends ModelBone {
             return;
         }
         var loc = getSpawnedModel().getModelHolder().getLocation().clone().add(0,-1.4375,0);
+        loc.setYaw(getSpawnedModel().getModelHolder().getBodyRotation());
         var finalPivot = getFinalPivot(parentPivot,parentAngle).clone();
         var finalRotation = getFinalRotation(parentAngle);
 

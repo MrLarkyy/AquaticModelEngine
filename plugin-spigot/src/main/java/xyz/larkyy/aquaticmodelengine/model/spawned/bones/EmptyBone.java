@@ -7,7 +7,7 @@ import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
-import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
+import xyz.larkyy.aquaticmodelengine.api.math.Quaternion;
 
 public class EmptyBone extends ModelBone {
 
@@ -25,7 +25,7 @@ public class EmptyBone extends ModelBone {
         var finalRotation = getFinalRotation(parentAngle);
 
         var loc = getSpawnedModel().getModelHolder().getLocation().clone().add(0,-1.4375,0);
-
+        loc.setYaw(getSpawnedModel().getModelHolder().getBodyRotation());
         for (var bone : getChildren()) {
             bone.tick(finalPivot.clone(),finalRotation);
         }

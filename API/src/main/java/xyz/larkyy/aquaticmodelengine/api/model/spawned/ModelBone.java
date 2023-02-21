@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+import xyz.larkyy.aquaticmodelengine.api.math.Quaternion;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.AttachmentModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
 
@@ -73,4 +74,21 @@ public abstract class ModelBone {
     public abstract void show(Player player);
 
     public abstract void hide(Player player);
+
+    public EulerAngle quatMul(EulerAngle eulerAngle1, EulerAngle eulerAngle2) {
+        var parentRotation = eulerAngle1;
+        parentRotation = new EulerAngle(
+                parentRotation.getX(),
+                parentRotation.getY(),
+                parentRotation.getZ()
+        );
+
+        Quaternion startQuat = new Quaternion(parentRotation);
+        Quaternion rotationQuat = new Quaternion(eulerAngle2);
+
+        Quaternion resultQuat = rotationQuat.mul(startQuat);
+        var resultEuler = resultQuat.getEulerAnglesXYZ();
+        resultEuler = resultEuler.setX(resultEuler.getX());
+        return resultEuler;
+    }
 }

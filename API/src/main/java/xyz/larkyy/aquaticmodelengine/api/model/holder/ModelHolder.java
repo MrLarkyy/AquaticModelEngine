@@ -73,4 +73,12 @@ public abstract class ModelHolder {
         return new Vector();
     }
 
+    public float getBodyRotation() {
+        return getLocation().getYaw();
+    }
+
+    public float getHeadRotation() {
+        return getLocation().getYaw();
+    }
+
 }

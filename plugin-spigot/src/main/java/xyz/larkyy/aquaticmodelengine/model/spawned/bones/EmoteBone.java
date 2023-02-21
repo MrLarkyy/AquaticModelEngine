@@ -11,9 +11,10 @@ import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
+import xyz.larkyy.aquaticmodelengine.api.model.template.player.LimbType;
 import xyz.larkyy.aquaticmodelengine.api.model.template.player.PlayerTemplateBone;
 import xyz.larkyy.aquaticmodelengine.model.spawned.BoneEntityImpl;
-import xyz.larkyy.aquaticmodelengine.util.math.Quaternion;
+import xyz.larkyy.aquaticmodelengine.api.math.Quaternion;
 
 public class EmoteBone extends ModelBone {
 
@@ -29,13 +30,31 @@ public class EmoteBone extends ModelBone {
         if (getSpawnedModel().getModelHolder() == null) {
             return;
         }
+        float offsetYaw = 0;
+
         var loc = getSpawnedModel().getModelHolder().getLocation().clone().add(0,-1.4375,0);
+        loc.setYaw(getSpawnedModel().getModelHolder().getBodyRotation());
+        if (getPlayerModel().rotateHead()) {
+            var limbType = ((PlayerTemplateBone)getTemplateBone()).getLimbType();
+            if (limbType == LimbType.HEAD) {
+                var rot1 = getSpawnedModel().getModelHolder().getBodyRotation();
+                var rot2 = getSpawnedModel().getModelHolder().getHeadRotation();
+
+                offsetYaw = rot2-rot1;
+                loc.setYaw(getSpawnedModel().getModelHolder().getHeadRotation());
+
+                //parentAngle = quatMul(parentAngle,new EulerAngle(0,Math.toRadians(resultRot),0));
+                //loc.setYaw(getPlayerModel().getModelHolder().getHeadRotation());
+            }
+        }
+
 
         var finalPivot = getFinalPivot(parentPivot,parentAngle).clone();
         var finalRotation = getFinalRotation(parentAngle);
 
+
         for (var bone : getChildren()) {
-            bone.tick(finalPivot.clone(),finalRotation);
+            bone.tick(finalPivot.clone(),finalRotation.add(0,Math.toRadians(offsetYaw),0));
         }
 
         finalPivot.rotateAroundY(-Math.toRadians(loc.getYaw()));
