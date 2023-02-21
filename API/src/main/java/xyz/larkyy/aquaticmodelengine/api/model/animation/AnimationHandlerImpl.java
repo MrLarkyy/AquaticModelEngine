@@ -48,7 +48,7 @@ public class AnimationHandlerImpl extends AnimationHandler {
         if (templateAnimation == null) {
             return;
         }
-        var runningAnimation = new RunningAnimation(templateAnimation,speed);
+        var runningAnimation = new RunningAnimation(this,templateAnimation,speed);
         getRunningAnimations().put(name,runningAnimation);
     }
 

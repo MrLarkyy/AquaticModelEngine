@@ -1,7 +1,10 @@
 package xyz.larkyy.aquaticmodelengine.api.model.animation;
 
+import org.bukkit.Bukkit;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+import xyz.larkyy.aquaticmodelengine.api.event.ModelAnimationEndEvent;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 
 public class RunningAnimation {
 
@@ -10,13 +13,15 @@ public class RunningAnimation {
     private double time = 0d;
     private AnimationPhase phase = AnimationPhase.PLAYING;
     private final TemplateAnimation templateAnimation;
+    private final AnimationHandler animationHandler;
 
-    public RunningAnimation(TemplateAnimation templateAnimation, double speed) {
+    public RunningAnimation(AnimationHandler animationHandler, TemplateAnimation templateAnimation, double speed) {
+        this.animationHandler = animationHandler;
         this.templateAnimation = templateAnimation;
         this.speed = speed;
     }
-    public RunningAnimation(TemplateAnimation templateAnimation) {
-        this(templateAnimation,1d);
+    public RunningAnimation(AnimationHandler animationHandler, TemplateAnimation templateAnimation) {
+        this(animationHandler, templateAnimation,1d);
     }
 
     public void setSpeed(double speed) {
@@ -56,6 +61,8 @@ public class RunningAnimation {
             }
         }
         this.phase = AnimationPhase.END;
+        var event = new ModelAnimationEndEvent(this);
+        Bukkit.getPluginManager().callEvent(event);
         return false;
     }
 
@@ -76,5 +83,9 @@ public class RunningAnimation {
     }
     public String getName() {
         return templateAnimation.getName();
+    }
+
+    public AnimationHandler getAnimationHandler() {
+        return animationHandler;
     }
 }

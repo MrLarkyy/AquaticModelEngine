@@ -20,9 +20,9 @@ public class PlayerAnimationHandlerImpl extends AnimationHandler{
 
     public PlayerAnimationHandlerImpl(PlayerModel spawnedModel, TemplateAnimation preAnimation, TemplateAnimation animation, TemplateAnimation postAnimation) {
         super(spawnedModel);
-        this.postAnimation = postAnimation == null ? null : new RunningAnimation(postAnimation,1);
-        this.preAnimation = preAnimation == null ? null : new RunningAnimation(preAnimation,1);
-        this.animation = animation == null ? null : new RunningAnimation(animation,1);
+        this.postAnimation = postAnimation == null ? null : new RunningAnimation(this,postAnimation,1);
+        this.preAnimation = preAnimation == null ? null : new RunningAnimation(this,preAnimation,1);
+        this.animation = animation == null ? null : new RunningAnimation(this,animation,1);
     }
 
     @Override
