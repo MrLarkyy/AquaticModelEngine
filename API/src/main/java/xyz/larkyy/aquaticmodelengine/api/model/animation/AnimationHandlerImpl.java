@@ -7,7 +7,6 @@ import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 
 public class AnimationHandlerImpl extends AnimationHandler {
 
-
     public AnimationHandlerImpl(SpawnedModel spawnedModel) {
         super(spawnedModel);
     }

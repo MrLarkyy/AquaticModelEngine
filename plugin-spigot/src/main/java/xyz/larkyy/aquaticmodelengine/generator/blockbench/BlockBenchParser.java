@@ -351,7 +351,7 @@ public class BlockBenchParser {
             switch (type.toLowerCase()) {
                 case "position": {
                     Vector vector = new Vector(
-                            -datapoints.get("x").getAsDouble(),
+                            datapoints.get("x").getAsDouble(),
                             datapoints.get("y").getAsDouble(),
                             -datapoints.get("z").getAsDouble()
                     );

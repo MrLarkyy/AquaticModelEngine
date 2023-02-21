@@ -98,31 +98,44 @@ public class ModelHandler implements IModelHandler {
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote) {
+    public SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote, String preAnimation, String animation, String postAnimation) {
         var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getEmote(emote);
-        return spawnEmote(holder,player,m);
+        return spawnEmote(holder,player,m,preAnimation,animation,postAnimation);
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template) {
+    public SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation) {
         if (template == null) {
             return null;
         }
-        var spawned = new PlayerModelImpl(template,holder,player);
+
+        var preAnimationTemplate = template.getAnimation(preAnimation);
+        var animationTemplate = template.getAnimation(animation);
+        var postAnimationTemplate = template.getAnimation(postAnimation);
+
+        var spawned = new PlayerModelImpl(template,holder,player,preAnimationTemplate,animationTemplate,postAnimationTemplate);
         holder.setEmote(spawned);
         spawned.applyModel();
         return spawned;
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote) {
+    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote, String preAnimation, String animation, String postAnimation) {
         var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getEmote(emote);
-        return spawnEmote(holder,url,slim,m);
+        return spawnEmote(holder,url,slim,m,preAnimation,animation,postAnimation);
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template) {
-        var spawned = new PlayerModelImpl(template,holder,url,slim);
+    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation) {
+        if (template == null) {
+            return null;
+        }
+
+        var preAnimationTemplate = template.getAnimation(preAnimation);
+        var animationTemplate = template.getAnimation(animation);
+        var postAnimationTemplate = template.getAnimation(postAnimation);
+
+        var spawned = new PlayerModelImpl(template,holder,url,slim, preAnimationTemplate, animationTemplate, postAnimationTemplate);
         holder.setEmote(spawned);
         spawned.applyModel();
         return spawned;

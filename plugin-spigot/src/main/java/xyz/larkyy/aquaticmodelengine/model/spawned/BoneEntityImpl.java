@@ -14,7 +14,6 @@ public class BoneEntityImpl extends BoneEntity {
         super(modelBone,fakeArmorStand);
     }
 
-
     @Override
     public void setHeadPose(EulerAngle angle) {
         if (angle.equals(getPrevHeadPose())) {
@@ -46,7 +45,6 @@ public class BoneEntityImpl extends BoneEntity {
                 getFakeArmorStand().updatePosition(player);
             }
         });
-
     }
 
     @Override

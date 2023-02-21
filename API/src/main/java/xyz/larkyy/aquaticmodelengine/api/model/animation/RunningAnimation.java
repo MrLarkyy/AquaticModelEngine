@@ -55,6 +55,7 @@ public class RunningAnimation {
                 return true;
             }
         }
+        this.phase = AnimationPhase.END;
         return false;
     }
 
@@ -68,5 +69,12 @@ public class RunningAnimation {
 
     public void stop() {
         this.phase = AnimationPhase.END;
+    }
+
+    public AnimationPhase getPhase() {
+        return phase;
+    }
+    public String getName() {
+        return templateAnimation.getName();
     }
 }

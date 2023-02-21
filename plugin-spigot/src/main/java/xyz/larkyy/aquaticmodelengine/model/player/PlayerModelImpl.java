@@ -1,10 +1,11 @@
 package xyz.larkyy.aquaticmodelengine.model.player;
 
 import org.bukkit.entity.Player;
-import org.bukkit.util.EulerAngle;
-import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
 import xyz.larkyy.aquaticmodelengine.api.model.animation.AnimationHandlerImpl;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.PlayerAnimationHandlerImpl;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.RunningAnimation;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.TemplateAnimation;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
@@ -20,11 +21,11 @@ import java.util.List;
 
 public class PlayerModelImpl extends PlayerModel {
 
-    public PlayerModelImpl(ModelTemplate modelTemplate, ModelHolder modelHolder, String url, boolean slim) {
+    public PlayerModelImpl(ModelTemplate modelTemplate, ModelHolder modelHolder, String url, boolean slim, TemplateAnimation preAnimation, TemplateAnimation animation, TemplateAnimation postAnimation) {
         super(modelTemplate, modelHolder, url, slim);
 
         setRenderHandler(new RenderHandlerImpl(this,15));
-        setAnimationHandler(new AnimationHandlerImpl(this));
+        setAnimationHandler(new PlayerAnimationHandlerImpl(this,preAnimation,animation,postAnimation));
 
         setBones(AquaticModelEngine.getInstance().getModelGenerator().getModelReader().loadModelBones(this));
         for (var bone : getBones().values()) {
@@ -32,11 +33,11 @@ public class PlayerModelImpl extends PlayerModel {
         }
     }
 
-    public PlayerModelImpl(ModelTemplate modelTemplate, ModelHolder modelHolder, Player player) {
+    public PlayerModelImpl(ModelTemplate modelTemplate, ModelHolder modelHolder, Player player, TemplateAnimation preAnimation, TemplateAnimation animation, TemplateAnimation postAnimation) {
         super(modelTemplate, modelHolder, TextureWrapper.fromBase64(AquaticModelEngine.getInstance().getNmsHandler().getTexture(player)));
 
         setRenderHandler(new RenderHandlerImpl(this,15));
-        setAnimationHandler(new AnimationHandlerImpl(this));
+        setAnimationHandler(new PlayerAnimationHandlerImpl(this,preAnimation,animation,postAnimation));
 
         setBones(AquaticModelEngine.getInstance().getModelGenerator().getModelReader().loadModelBones(this));
         for (var bone : getBones().values()) {
@@ -70,11 +71,9 @@ public class PlayerModelImpl extends PlayerModel {
     @Override
     public void tick() {
         getAnimationHandler().update();
-        /*
-        for (var bone : bones.values()) {
-            bone.tick();
+        if (!((PlayerAnimationHandlerImpl)getAnimationHandler()).isPlaying()) {
+            return;
         }
-         */
         for (var bone : getParentBones().values()) {
             bone.tick(getModelHolder().getPivot(), getModelHolder().getRotation());
         }
@@ -88,6 +87,9 @@ public class PlayerModelImpl extends PlayerModel {
 
     @Override
     public void applyModel() {
+        if (!((PlayerAnimationHandlerImpl)getAnimationHandler()).isPlaying()) {
+            return;
+        }
         for (var model : getParentBones().values()) {
             model.spawnModel(getModelHolder().getPivot(), getModelHolder().getRotation());
         }
@@ -141,7 +143,7 @@ public class PlayerModelImpl extends PlayerModel {
 
     @Override
     public void playAnimation(String name, double speed) {
-        getAnimationHandler().playAnimation(name,speed);
+        //getAnimationHandler().playAnimation(name,speed);
     }
 
 }

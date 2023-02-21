@@ -22,10 +22,10 @@ public interface IModelHandler {
     ModelHolder createDummyModelHolder(Location location);
     void tickModels();
 
-    SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote);
-    SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template);
-    SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote);
-    SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template);
+    SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote, String preAnimation, String animation, String postAnimation);
+    SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation);
+    SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote, String preAnimation, String animation, String postAnimation);
+    SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation);
 
     SpawnedModel attachModel(ModelBone modelBone, String model);
     SpawnedModel attachModel(ModelBone modelBone, ModelTemplateImpl template);

@@ -1,9 +1,6 @@
 package xyz.larkyy.aquaticmodelengine.model.spawned;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.util.EulerAngle;
-import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
 import xyz.larkyy.aquaticmodelengine.api.model.animation.AnimationHandlerImpl;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;

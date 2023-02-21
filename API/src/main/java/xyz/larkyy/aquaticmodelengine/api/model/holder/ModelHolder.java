@@ -1,8 +1,12 @@
 package xyz.larkyy.aquaticmodelengine.api.model.holder;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
+import xyz.larkyy.aquaticmodelengine.api.event.EmoteEndEvent;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.AnimationPhase;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.PlayerAnimationHandlerImpl;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 
@@ -38,8 +42,10 @@ public abstract class ModelHolder {
         spawnedModels.values().forEach(SpawnedModel::tick);
         if (emote != null) {
             emote.tick();
-            if (emote.getAnimationHandler().getRunningAnimations().isEmpty()) {
+            if (!(emote.getAnimationHandler().getRunningAnimations().values().stream().anyMatch(v -> v.getPhase()!= AnimationPhase.END))) {
                 emote.removeModel();
+                var event = new EmoteEndEvent(emote);
+                Bukkit.getPluginManager().callEvent(event);
                 emote = null;
             }
         }

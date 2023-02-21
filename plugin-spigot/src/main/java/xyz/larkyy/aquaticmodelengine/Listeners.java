@@ -1,29 +1,41 @@
 package xyz.larkyy.aquaticmodelengine;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.larkyy.aquaticmodelengine.api.event.EmoteEndEvent;
 
 public class Listeners implements Listener {
 
-
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
+        if (e.getMessage().toLowerCase().contains("apply model open")) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+
+                    var holder = AquaticModelEngine.getInstance().getModelHandler().getModelHolder(e.getPlayer());
+                    var spawned = AquaticModelEngine.getInstance().getModelHandler().spawnModel(holder,"openemote");
+                    spawned.playAnimation("open",1);
+                }
+            }.runTask(AquaticModelEngine.getInstance());
+        }
+
         if (e.getMessage().toLowerCase().contains("play emote open")) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     e.getPlayer().setInvisible(true);
                     var holder = AquaticModelEngine.getInstance().getModelHandler().getModelHolder(e.getPlayer());
-                    var spawned = AquaticModelEngine.getInstance().getModelHandler().spawnEmote(holder,e.getPlayer(),"openemote");
-                    spawned.playAnimation("open",1);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            e.getPlayer().setInvisible(false);
-                        }
-                    }.runTaskLater(AquaticModelEngine.getInstance(),60);
+                    AquaticModelEngine.getInstance().getModelHandler().spawnEmote(
+                            holder,
+                            e.getPlayer(),
+                            "openemote",
+                            null,
+                            "open",
+                            null);
                 }
             }.runTask(AquaticModelEngine.getInstance());
         }
@@ -33,19 +45,23 @@ public class Listeners implements Listener {
                 public void run() {
                     e.getPlayer().setInvisible(true);
                     var holder = AquaticModelEngine.getInstance().getModelHandler().getModelHolder(e.getPlayer());
-                    var spawned = AquaticModelEngine.getInstance().getModelHandler().spawnEmote(holder,e.getPlayer(),"steve2");
-                    spawned.playAnimation("wave",1);
+                    var spawned = AquaticModelEngine.getInstance().getModelHandler().spawnEmote(
+                            holder,
+                            e.getPlayer(),
+                            "steve2",
+                            null,
+                            "wave",
+                            null);
                     var bone = spawned.getBone("head");
                     AquaticModelEngine.getInstance().getModelHandler().attachModel(bone,"big_otter");
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            e.getPlayer().setInvisible(false);
-                        }
-                    }.runTaskLater(AquaticModelEngine.getInstance(),60);
 
                 }
             }.runTask(AquaticModelEngine.getInstance());
         }
+    }
+
+    @EventHandler
+    public void onEmoteEnd(EmoteEndEvent e) {
+        Bukkit.getPlayer("MrLarkyy_").setInvisible(false);
     }
 }
