@@ -15,6 +15,11 @@ public class EntityModelHolder extends ModelHolder {
     }
 
     @Override
+    public boolean checkNull() {
+        return boundEntity != null;
+    }
+
+    @Override
     public void teleport(Location location) {
         boundEntity.teleport(location);
     }

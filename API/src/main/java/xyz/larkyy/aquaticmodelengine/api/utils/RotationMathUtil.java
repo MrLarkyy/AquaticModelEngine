@@ -1,4 +1,4 @@
-package xyz.larkyy.aquaticmodelengine.api.model.holder.rotation;
+package xyz.larkyy.aquaticmodelengine.api.utils;
 
 public class RotationMathUtil {
 

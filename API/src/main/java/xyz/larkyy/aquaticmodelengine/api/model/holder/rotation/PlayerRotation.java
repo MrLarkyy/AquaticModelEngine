@@ -2,6 +2,7 @@ package xyz.larkyy.aquaticmodelengine.api.model.holder.rotation;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import xyz.larkyy.aquaticmodelengine.api.utils.RotationMathUtil;
 
 public class PlayerRotation {
 

@@ -105,7 +105,9 @@ public class ModelHandler implements IModelHandler {
 
     public void tickModels() {
         for (var holder : modelHolders.values()) {
-            holder.tick();
+            if (!holder.tick()) {
+                removeHolder(holder);
+            }
         }
     }
 

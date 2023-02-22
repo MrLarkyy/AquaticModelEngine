@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.larkyy.aquaticmodelengine.api.event.EmoteEndEvent;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
@@ -11,6 +12,15 @@ import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 public class Listeners implements Listener {
 
     private SpawnedModel spawnedModel;
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent e) {
+        var holder = AquaticModelEngine.getInstance().getModelHandler().getModelHolder(e.getPlayer().getUniqueId());
+        if (holder == null) {
+            return;
+        }
+        AquaticModelEngine.getInstance().getModelHandler().removeHolder(holder);
+    }
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
@@ -81,10 +91,14 @@ public class Listeners implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (spawnedModel == null) {
+                    var holder = AquaticModelEngine.getInstance().getModelHandler().getModelHolder(e.getPlayer().getUniqueId());
+                    if (holder == null) {
                         return;
                     }
-                    spawnedModel.getAnimationHandler().stopAnimation("animation");
+                    var emote = holder.getEmote();
+                    if (emote != null) {
+                        emote.getAnimationHandler().stopAnimation("animation");
+                    }
 
                 }
             }.runTask(AquaticModelEngine.getInstance());

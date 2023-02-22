@@ -39,11 +39,16 @@ public class PlayerModelHolder extends ModelHolder {
     }
 
     @Override
-    public void tick() {
+    public boolean tick() {
         if (bodyRotation != null) {
             bodyRotation.tickMovement(getLocation());
         }
-        super.tick();
+        return super.tick();
+    }
+
+    @Override
+    public boolean checkNull() {
+        return player != null && player.isOnline();
     }
 
     @Override

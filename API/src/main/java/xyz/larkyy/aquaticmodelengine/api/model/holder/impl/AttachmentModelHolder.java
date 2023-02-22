@@ -22,6 +22,11 @@ public class AttachmentModelHolder extends ModelHolder {
     }
 
     @Override
+    public boolean checkNull() {
+        return modelBone != null;
+    }
+
+    @Override
     public void teleport(Location location) {
     }
 

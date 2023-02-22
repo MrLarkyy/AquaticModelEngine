@@ -18,7 +18,9 @@ import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_19_R2.util.CraftVector;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
+import xyz.larkyy.aquaticmodelengine.api.AquaticModelEngineAPI;
 import xyz.larkyy.aquaticmodelengine.api.FakeArmorStand;
 
 import java.util.ArrayList;
@@ -52,6 +54,9 @@ public class FakeArmorStandImpl implements FakeArmorStand {
         armorStand.setHeadPose(new Rotations((float) Math.toDegrees(eulerAngle.getX()),
                 (float) Math.toDegrees(eulerAngle.getY()),
                 (float) Math.toDegrees(eulerAngle.getZ())));
+        armorStand.setRightArmPose(new Rotations((float) Math.toDegrees(eulerAngle.getX()),
+                (float) Math.toDegrees(eulerAngle.getY()),
+                (float) Math.toDegrees(eulerAngle.getZ())));
     }
 
     public void setHeadItem(ItemStack itemStack) {
@@ -68,6 +73,16 @@ public class FakeArmorStandImpl implements FakeArmorStand {
         for (var packet : packets) {
             ((CraftPlayer) player).getHandle().connection.connection.send(packet);
         }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (var packet : updateEquipmentPackets()) {
+                    ((CraftPlayer) player).getHandle().connection.connection.send(packet);
+                }
+            }
+        }.runTaskLater(AquaticModelEngineAPI.pluginInstance,1);
+
     }
 
     @Override
@@ -102,6 +117,7 @@ public class FakeArmorStandImpl implements FakeArmorStand {
 
     private List<Packet<?>> showPackets() {
         List<Packet<?>> packets = new ArrayList<>();
+        packets.add(new ClientboundTeleportEntityPacket(armorStand));
         var packet = new ClientboundAddEntityPacket(
                 armorStand.getId(),
                 armorStand.getUUID(),
@@ -109,17 +125,14 @@ public class FakeArmorStandImpl implements FakeArmorStand {
                 armorStand.getY(),
                 armorStand.getZ(),
                 armorStand.getBukkitYaw(),
-                0,
+                armorStand.getBukkitYaw(),
                 EntityType.ARMOR_STAND,
                 0,
                 new Vec3(0, 0, 0),
                 0
         );
         packets.add(packet);
-
         packets.addAll(updateMetaPackets());
-        packets.addAll(updateEquipmentPackets());
-
         return packets;
     }
 
@@ -137,7 +150,8 @@ public class FakeArmorStandImpl implements FakeArmorStand {
     private List<Packet<?>> updateEquipmentPackets() {
         List<Packet<?>> packets = new ArrayList<>();
         var packet = new ClientboundSetEquipmentPacket(armorStand.getId(), List.of(
-                new Pair<>(EquipmentSlot.HEAD, armorStand.getItemBySlot(EquipmentSlot.HEAD))
+                new Pair<>(EquipmentSlot.HEAD, armorStand.getItemBySlot(EquipmentSlot.HEAD)),
+                new Pair<>(EquipmentSlot.MAINHAND, armorStand.getItemBySlot(EquipmentSlot.MAINHAND))
         ));
         packets.add(packet);
         return packets;

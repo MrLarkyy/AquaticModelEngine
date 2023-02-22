@@ -75,20 +75,4 @@ public abstract class ModelBone {
 
     public abstract void hide(Player player);
 
-    public EulerAngle quatMul(EulerAngle eulerAngle1, EulerAngle eulerAngle2) {
-        var parentRotation = eulerAngle1;
-        parentRotation = new EulerAngle(
-                parentRotation.getX(),
-                parentRotation.getY(),
-                parentRotation.getZ()
-        );
-
-        Quaternion startQuat = new Quaternion(parentRotation);
-        Quaternion rotationQuat = new Quaternion(eulerAngle2);
-
-        Quaternion resultQuat = rotationQuat.mul(startQuat);
-        var resultEuler = resultQuat.getEulerAnglesXYZ();
-        resultEuler = resultEuler.setX(resultEuler.getX());
-        return resultEuler;
-    }
 }

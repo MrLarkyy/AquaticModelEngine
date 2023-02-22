@@ -14,6 +14,11 @@ public class DummyModelHolder extends ModelHolder {
     }
 
     @Override
+    public boolean checkNull() {
+        return location != null;
+    }
+
+    @Override
     public void teleport(Location location) {
         if (location == null) {
             return;

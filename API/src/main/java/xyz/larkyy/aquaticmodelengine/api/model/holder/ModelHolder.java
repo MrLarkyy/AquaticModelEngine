@@ -6,7 +6,6 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.api.event.EmoteEndEvent;
 import xyz.larkyy.aquaticmodelengine.api.model.animation.AnimationPhase;
-import xyz.larkyy.aquaticmodelengine.api.model.animation.PlayerAnimationHandlerImpl;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 
@@ -31,6 +30,12 @@ public abstract class ModelHolder {
         return emote;
     }
 
+    public void stopEmote() {
+        if (emote != null) {
+            emote.removeModel();
+        }
+    }
+
     public void setEmote(PlayerModel emote) {
         if (this.emote != null) {
             emote.removeModel();
@@ -38,7 +43,10 @@ public abstract class ModelHolder {
         this.emote = emote;
     }
 
-    public void tick() {
+    public boolean tick() {
+        if (!checkNull()) {
+            return false;
+        }
         spawnedModels.values().forEach(SpawnedModel::tick);
         if (emote != null) {
             emote.tick();
@@ -49,7 +57,10 @@ public abstract class ModelHolder {
                 emote = null;
             }
         }
+        return true;
     }
+
+    public abstract boolean checkNull();
 
     public void addModel(SpawnedModel spawnedModel) {
         if (spawnedModels.containsKey(spawnedModel.getModelTemplate().getName())) {
