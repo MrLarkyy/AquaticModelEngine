@@ -11,6 +11,7 @@ import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.EntityModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.impl.PlayerModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.ModelBone;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
+import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplateImpl;
 import xyz.larkyy.aquaticmodelengine.model.player.PlayerModelImpl;
 import xyz.larkyy.aquaticmodelengine.model.spawned.SpawnedModelImpl;
@@ -112,13 +113,13 @@ public class ModelHandler implements IModelHandler {
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, Player player, String emote, String preAnimation, String animation, String postAnimation, boolean rotateHead) {
+    public PlayerModel spawnEmote(ModelHolder holder, Player player, String emote, String preAnimation, String animation, String postAnimation, boolean rotateHead) {
         var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getEmote(emote);
         return spawnEmote(holder,player,m,preAnimation,animation,postAnimation,rotateHead);
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template,
+    public PlayerModel spawnEmote(ModelHolder holder, Player player, ModelTemplateImpl template,
                                    String preAnimation, String animation, String postAnimation,
                                    boolean rotateHead) {
         if (template == null) {
@@ -136,13 +137,13 @@ public class ModelHandler implements IModelHandler {
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote, String preAnimation, String animation, String postAnimation, boolean rotateHead) {
+    public PlayerModel spawnEmote(ModelHolder holder, String url, boolean slim, String emote, String preAnimation, String animation, String postAnimation, boolean rotateHead) {
         var m = AquaticModelEngine.getInstance().getModelGenerator().getRegistry().getEmote(emote);
         return spawnEmote(holder,url,slim,m,preAnimation,animation,postAnimation,rotateHead);
     }
 
     @Override
-    public SpawnedModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation, boolean rotateHead) {
+    public PlayerModel spawnEmote(ModelHolder holder, String url, boolean slim, ModelTemplateImpl template, String preAnimation, String animation, String postAnimation, boolean rotateHead) {
         if (template == null) {
             return null;
         }
