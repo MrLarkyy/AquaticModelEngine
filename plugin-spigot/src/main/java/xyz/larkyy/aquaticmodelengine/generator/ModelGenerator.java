@@ -23,6 +23,7 @@ public class ModelGenerator {
     private final TemplateRegistry registry = new TemplateRegistry();
 
     public void generateModels() {
+        registry.clear();
         var mainFolder = AquaticModelEngine.getPlugin(AquaticModelEngine.class).getDataFolder();
         mainFolder.mkdirs();
 

@@ -20,6 +20,11 @@ public class TemplateRegistry {
         emotes.put(emote.getName(),emote);
     }
 
+    public void clear() {
+        templates.clear();
+        emotes.clear();
+    }
+
     public ModelTemplateImpl getTemplate(String name) {
         return templates.get(name);
     }

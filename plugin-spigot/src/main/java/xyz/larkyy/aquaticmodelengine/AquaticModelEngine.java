@@ -5,6 +5,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import xyz.larkyy.aquaticmodelengine.api.AquaticModelEngineAPI;
 import xyz.larkyy.aquaticmodelengine.api.IEntityHandler;
 import xyz.larkyy.aquaticmodelengine.api.INMSHandler;
+import xyz.larkyy.aquaticmodelengine.commands.Commands;
 import xyz.larkyy.aquaticmodelengine.generator.ModelGenerator;
 import xyz.larkyy.aquaticmodelengine.model.ModelHandler;
 import xyz.larkyy.aquaticmodelengine.nms.nms1_19_2.NMSHandler;
@@ -54,6 +55,7 @@ public final class AquaticModelEngine extends JavaPlugin {
                 getServer().getPluginManager().registerEvents(new Listeners(),AquaticModelEngine.this);
             }
         }.runTaskLater(this,1);
+        getCommand("aquaticmodelengine").setExecutor(new Commands());
     }
 
     @Override

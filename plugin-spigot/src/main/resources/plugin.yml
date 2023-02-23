@@ -2,3 +2,10 @@ name: AquaticModelEngine
 version: '${project.version}'
 main: xyz.larkyy.aquaticmodelengine.AquaticModelEngine
 api-version: 1.17
+commands:
+  aquaticmodelengine:
+    aliases:
+      - ame
+      - ameg
+      - amodelengine
+      - amengine
