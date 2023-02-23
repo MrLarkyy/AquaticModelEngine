@@ -36,9 +36,7 @@ public class JavaRotation {
     }
 
     private float getAngle(double rads) {
-        var num = Math.round((float)Math.toDegrees(rads)*10f)/10f;
-        Bukkit.broadcastMessage("Converting "+rads+" Rads to "+num+" degrees");
-        return num;
+        return Math.round((float)Math.toDegrees(rads)*10f)/10f;
     }
 
     public float getAngle() {

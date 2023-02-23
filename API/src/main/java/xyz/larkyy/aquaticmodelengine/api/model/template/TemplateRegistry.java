@@ -11,12 +11,12 @@ public class TemplateRegistry {
     private final Map<String, ModelTemplateImpl> emotes = new HashMap<>();
 
     public void addTemplate(ModelTemplateImpl template) {
-        Bukkit.broadcastMessage("Added template: "+template.getName());
+        Bukkit.getConsoleSender().sendMessage("§6[AquaticModelEngine]§f Added template: "+template.getName());
         templates.put(template.getName(),template);
     }
 
     public void addEmote(ModelTemplateImpl emote) {
-        Bukkit.broadcastMessage("Added emote: "+emote.getName());
+        Bukkit.getConsoleSender().sendMessage("§6[AquaticModelEngine]§f Added emote: "+emote.getName());
         emotes.put(emote.getName(),emote);
     }
 
