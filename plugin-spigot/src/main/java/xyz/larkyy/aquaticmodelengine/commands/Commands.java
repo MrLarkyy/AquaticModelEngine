@@ -24,20 +24,6 @@ public class Commands implements CommandExecutor {
             return false;
         }
 
-        /*
-        if (args.length > 1 && args[0].equalsIgnoreCase("editor")) {
-            new Editor(
-                    null,
-                    (Player) sender,
-                    Crate.class,
-                    Crate.get(args[1]),
-                    "Crate Editor"
-            ).open((Player) sender);
-            return true;
-        }
-         */
-
-
         ICommand cmd = availableCommands.get(args[0]);
         if (cmd == null) {
             return false;

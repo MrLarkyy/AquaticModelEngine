@@ -69,7 +69,7 @@ public class PlayerModelImpl extends PlayerModel {
     @Override
     public void tick() {
         getAnimationHandler().update();
-        if (!((PlayerAnimationHandlerImpl)getAnimationHandler()).isPlaying()) {
+        if (!getAnimationHandler().isPlaying()) {
             return;
         }
         for (var bone : getParentBones().values()) {
@@ -85,7 +85,7 @@ public class PlayerModelImpl extends PlayerModel {
 
     @Override
     public void applyModel() {
-        if (!((PlayerAnimationHandlerImpl)getAnimationHandler()).isPlaying()) {
+        if (!getAnimationHandler().isPlaying()) {
             return;
         }
         for (var model : getParentBones().values()) {

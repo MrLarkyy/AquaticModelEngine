@@ -33,6 +33,7 @@ public abstract class ModelHolder {
     public void stopEmote() {
         if (emote != null) {
             emote.removeModel();
+            emote = null;
         }
     }
 

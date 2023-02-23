@@ -2,6 +2,8 @@ package xyz.larkyy.aquaticmodelengine.api.model.spawned.player;
 
 import org.bukkit.entity.Player;
 import xyz.larkyy.aquaticmodelengine.api.AquaticModelEngineAPI;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.AnimationHandler;
+import xyz.larkyy.aquaticmodelengine.api.model.animation.PlayerAnimationHandlerImpl;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.ModelTemplate;
@@ -28,6 +30,11 @@ public abstract class PlayerModel extends SpawnedModel {
         this.texture = texture;
         this.rotateHead = rotateHead;
         //this.texture = TextureWrapper.fromBase64(AquaticModelEngine.getInstance().getNmsHandler().getTexture(player));
+    }
+
+    @Override
+    public PlayerAnimationHandlerImpl getAnimationHandler() {
+        return (PlayerAnimationHandlerImpl) super.getAnimationHandler();
     }
 
     public TextureWrapper getTexture() {

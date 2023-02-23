@@ -138,6 +138,20 @@ public class PlayerAnimationHandlerImpl extends AnimationHandler{
         }
     }
 
+    public void stopAnimation() {
+        if (animationState == State.PRE && preAnimation != null) {
+            preAnimation.stop();
+        } else if (animationState == State.PLAYING && animation != null) {
+            animation.stop();
+        } else if (animationState == State.POST && postAnimation != null) {
+            postAnimation.stop();
+        }
+    }
+
+    public State getAnimationState() {
+        return animationState;
+    }
+
     @Override
     public void stopAnimations() {
         getRunningAnimations().values().forEach(RunningAnimation::stop);

@@ -65,6 +65,7 @@ public class ModelHandler implements IModelHandler {
     // Removes all holder models and keeps the holder entity alive
     public void removeHolder(ModelHolder modelHolder) {
         modelHolder.getSpawnedModels().values().forEach(SpawnedModel::removeModel);
+        modelHolder.stopEmote();
         modelHolders.remove(modelHolder.getUniqueId());
     }
 
