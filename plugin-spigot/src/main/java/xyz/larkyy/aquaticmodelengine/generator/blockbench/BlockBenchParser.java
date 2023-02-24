@@ -317,9 +317,11 @@ public class BlockBenchParser {
                 object.get("length").getAsDouble(),
                 LoopMode.valueOf(object.get("loop").getAsString().toUpperCase())
         );
-        for (var entry : object.get("animators").getAsJsonObject().entrySet()) {
-            var obj = entry.getValue().getAsJsonObject();
-            setupTimeline(templateAnimation,obj);
+        if (object.has("animators")) {
+            for (var entry : object.get("animators").getAsJsonObject().entrySet()) {
+                var obj = entry.getValue().getAsJsonObject();
+                setupTimeline(templateAnimation,obj);
+            }
         }
         return templateAnimation;
     }
