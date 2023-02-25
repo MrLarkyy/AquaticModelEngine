@@ -22,6 +22,9 @@ public class BoneReader {
 
     public ModelBone loadBone(TemplateBone templateBone, Map<String, ModelBone> loadedBones, ModelBone parentBone, SpawnedModel spawnedModel) {
 
+        if (templateBone.getModelId() == 0) {
+            return emptyBoneReader.loadBone(templateBone,loadedBones,parentBone,spawnedModel);
+        }
         if (spawnedModel instanceof PlayerModel playerModel) {
             var limbType = LimbType.get(templateBone.getName());
             if (limbType != null) {
