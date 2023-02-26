@@ -2,7 +2,7 @@ package xyz.larkyy.aquaticmodelengine.generator.blockbench;
 
 public class BBTexture {
 
-    private final String name;
+    private String name;
     private final String uuid;
     private final String source;
     private final String id;
@@ -12,6 +12,10 @@ public class BBTexture {
         this.uuid = uuid;
         this.source = source;
         this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getName() {

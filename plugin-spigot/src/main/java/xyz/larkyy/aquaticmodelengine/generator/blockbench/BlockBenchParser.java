@@ -298,6 +298,12 @@ public class BlockBenchParser {
         for (var item : array) {
             var texture = gson.fromJson(item,BBTexture.class);
             if (texture != null) {
+                var name = texture.getName();
+                if (name.endsWith(".png")) {
+                    name = name.substring(0,name.length()-4);
+                }
+                name = name.replace(".","").toLowerCase();
+                texture.setName(name);
                 textures.put(textures.size(), texture);
             }
         }
