@@ -1,6 +1,5 @@
 package xyz.larkyy.aquaticmodelengine.api.model.holder.impl;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;

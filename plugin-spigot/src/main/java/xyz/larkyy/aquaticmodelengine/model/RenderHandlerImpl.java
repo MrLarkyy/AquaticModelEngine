@@ -87,7 +87,6 @@ public class RenderHandlerImpl extends RenderHandler {
         }
 
         getSeenBy().add(player.getUniqueId());
-
         getSpawnedModel().spawn(player);
     }
 

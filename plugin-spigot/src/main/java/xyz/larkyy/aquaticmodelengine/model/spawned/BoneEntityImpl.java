@@ -3,6 +3,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.api.FakeArmorStand;
 import xyz.larkyy.aquaticmodelengine.api.model.RenderHandler;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.BoneEntity;
@@ -37,19 +38,30 @@ public class BoneEntityImpl extends BoneEntity {
         }
 
          */
+
         setPrevLocation(location);
         getFakeArmorStand().teleport(location);
         getRenderHandler().getSeenBy().forEach(uuid -> {
             var player = Bukkit.getPlayer(uuid);
             if (player != null) {
-                getFakeArmorStand().updatePosition(player);
+                var vector = getModelBone().getSpawnedModel().getPlayerOffset(player);
+                if (vector.getX() > 0 || vector.getZ() > 0) {
+                    var yaw = getModelBone().getSpawnedModel().getModelHolder().getBodyRotation();
+                    vector.rotateAroundY(-Math.toRadians(yaw));
+                }
+                getFakeArmorStand().updatePosition(player,vector);
             }
         });
     }
 
     @Override
     public void show(Player player) {
-        getFakeArmorStand().show(player);
+        var vector = getModelBone().getSpawnedModel().getPlayerOffset(player);
+        if (vector.getX() > 0 || vector.getZ() > 0) {
+            var yaw = getModelBone().getSpawnedModel().getModelHolder().getLocation().getYaw();
+            vector.rotateAroundY(-Math.toRadians(yaw));
+        }
+        getFakeArmorStand().show(player,vector);
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.phys.Vec3;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
@@ -21,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.api.AquaticModelEngineAPI;
 import xyz.larkyy.aquaticmodelengine.api.FakeArmorStand;
 
@@ -84,7 +86,24 @@ public class FakeArmorStandImpl implements FakeArmorStand {
                 }
             }
         }.runTaskLater(AquaticModelEngineAPI.pluginInstance,1);
+    }
 
+    @Override
+    public void show(Player player, Vector offset) {
+        var packets = showPackets(offset);
+
+        for (var packet : packets) {
+            ((CraftPlayer) player).getHandle().connection.connection.send(packet);
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (var packet : updateEquipmentPackets()) {
+                    ((CraftPlayer) player).getHandle().connection.connection.send(packet);
+                }
+            }
+        }.runTaskLater(AquaticModelEngineAPI.pluginInstance,1);
     }
 
     @Override
@@ -106,6 +125,15 @@ public class FakeArmorStandImpl implements FakeArmorStand {
         final var packet = new ClientboundTeleportEntityPacket(armorStand);
         ((CraftPlayer)player).getHandle().connection.connection.send(packet);
     }
+    @Override
+    public void updatePosition(Player player, Vector offset) {
+        var pos = armorStand.position();
+        var newPos = pos.add(offset.getX(),offset.getY(),offset.getZ());
+        armorStand.setPos(newPos);
+        final var packet = new ClientboundTeleportEntityPacket(armorStand);
+        ((CraftPlayer)player).getHandle().connection.connection.send(packet);
+        armorStand.setPos(pos);
+    }
 
     @Override
     public int getId() {
@@ -126,6 +154,27 @@ public class FakeArmorStandImpl implements FakeArmorStand {
                 armorStand.getX(),
                 armorStand.getY(),
                 armorStand.getZ(),
+                armorStand.getBukkitYaw(),
+                armorStand.getBukkitYaw(),
+                EntityType.ARMOR_STAND,
+                0,
+                new Vec3(0, 0, 0),
+                0
+        );
+        packets.add(packet);
+        packets.addAll(updateMetaPackets());
+
+        return packets;
+    }
+    private List<Packet<?>> showPackets(Vector offset) {
+        List<Packet<?>> packets = new ArrayList<>();
+        packets.add(new ClientboundTeleportEntityPacket(armorStand));
+        var packet = new ClientboundAddEntityPacket(
+                armorStand.getId(),
+                armorStand.getUUID(),
+                armorStand.getX()+offset.getX(),
+                armorStand.getY()+offset.getY(),
+                armorStand.getZ()+offset.getZ(),
                 armorStand.getBukkitYaw(),
                 armorStand.getBukkitYaw(),
                 EntityType.ARMOR_STAND,

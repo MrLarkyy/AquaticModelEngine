@@ -1,6 +1,7 @@
 package xyz.larkyy.aquaticmodelengine.api.model.spawned;
 
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.api.model.holder.ModelHolder;
 import xyz.larkyy.aquaticmodelengine.api.model.RenderHandler;
 import xyz.larkyy.aquaticmodelengine.api.model.animation.AnimationHandler;
@@ -9,6 +10,7 @@ import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public abstract class SpawnedModel {
 
@@ -18,6 +20,22 @@ public abstract class SpawnedModel {
     private Map<String,ModelBone> bones = new HashMap<>();
     private final Map<String,ModelBone> parentBones = new HashMap<>();
     private AnimationHandler animationHandler = null;
+
+    private final Map<UUID,Vector> playerOffsets = new HashMap<>();
+    public Map<UUID,Vector> getPlayerOffsets() {
+        return playerOffsets;
+    }
+
+    public Vector getPlayerOffset(Player player) {
+        var offset = playerOffsets.get(player.getUniqueId());
+        if (offset == null) {
+            offset = new Vector();
+        }
+        return offset.clone();
+    }
+    public void setPlayerOffset(Player player, Vector holderOffset) {
+        playerOffsets.put(player.getUniqueId(),holderOffset);
+    }
 
     public SpawnedModel(ModelHolder modelHolder, ModelTemplate modelTemplate) {
         this.modelHolder = modelHolder;

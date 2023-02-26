@@ -1,6 +1,7 @@
 package xyz.larkyy.aquaticmodelengine.model.player;
 
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 import xyz.larkyy.aquaticmodelengine.AquaticModelEngine;
 import xyz.larkyy.aquaticmodelengine.api.model.animation.PlayerAnimationHandlerImpl;
 import xyz.larkyy.aquaticmodelengine.api.model.animation.TemplateAnimation;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class PlayerModelImpl extends PlayerModel {
 
+
     public PlayerModelImpl(ModelTemplate modelTemplate, ModelHolder modelHolder, String url, boolean slim, TemplateAnimation preAnimation, TemplateAnimation animation, TemplateAnimation postAnimation, boolean rotateHead) {
         super(modelTemplate, modelHolder, url, slim, rotateHead);
 
@@ -34,14 +36,15 @@ public class PlayerModelImpl extends PlayerModel {
     public PlayerModelImpl(ModelTemplate modelTemplate, ModelHolder modelHolder, Player player, TemplateAnimation preAnimation, TemplateAnimation animation, TemplateAnimation postAnimation, boolean rotateHead) {
         super(modelTemplate, modelHolder, TextureWrapper.fromBase64(AquaticModelEngine.getInstance().getNmsHandler().getTexture(player)), rotateHead);
 
-        setRenderHandler(new RenderHandlerImpl(this,15));
-        setAnimationHandler(new PlayerAnimationHandlerImpl(this,preAnimation,animation,postAnimation));
+        setRenderHandler(new RenderHandlerImpl(this, 15));
+        setAnimationHandler(new PlayerAnimationHandlerImpl(this, preAnimation, animation, postAnimation));
 
         setBones(AquaticModelEngine.getInstance().getModelGenerator().getModelReader().loadModelBones(this));
         for (var bone : getBones().values()) {
             addParentBone(bone);
         }
     }
+
 
     @Override
     public void addParentBone(ModelBone modelBone) {

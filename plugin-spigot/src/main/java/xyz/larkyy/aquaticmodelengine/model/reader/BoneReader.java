@@ -5,6 +5,7 @@ import xyz.larkyy.aquaticmodelengine.api.model.spawned.SpawnedModel;
 import xyz.larkyy.aquaticmodelengine.api.model.spawned.player.PlayerModel;
 import xyz.larkyy.aquaticmodelengine.api.model.template.TemplateBone;
 import xyz.larkyy.aquaticmodelengine.api.model.template.player.LimbType;
+import xyz.larkyy.aquaticmodelengine.api.model.template.player.PlayerTemplateBone;
 import xyz.larkyy.aquaticmodelengine.model.reader.bone.AbstractBoneReader;
 import xyz.larkyy.aquaticmodelengine.model.reader.bone.BasicBoneReader;
 import xyz.larkyy.aquaticmodelengine.model.reader.bone.EmptyBoneReader;
@@ -22,7 +23,7 @@ public class BoneReader {
 
     public ModelBone loadBone(TemplateBone templateBone, Map<String, ModelBone> loadedBones, ModelBone parentBone, SpawnedModel spawnedModel) {
 
-        if (templateBone.getModelId() == 0) {
+        if (templateBone.getModelId() == 0 && !(templateBone instanceof PlayerTemplateBone)) {
             return emptyBoneReader.loadBone(templateBone,loadedBones,parentBone,spawnedModel);
         }
         if (spawnedModel instanceof PlayerModel playerModel) {
